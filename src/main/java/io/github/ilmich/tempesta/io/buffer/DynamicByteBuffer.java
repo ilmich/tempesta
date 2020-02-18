@@ -22,13 +22,11 @@ package io.github.ilmich.tempesta.io.buffer;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
-import com.google.common.base.Charsets;
-
 public class DynamicByteBuffer {
 
     private ByteBuffer backend;
 
-    private Charset mainCharset = Charsets.US_ASCII;
+    private Charset mainCharset = Charset.forName("ASCII");
 
     private DynamicByteBuffer(ByteBuffer bb) {
 	this.backend = bb;

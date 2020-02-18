@@ -1,10 +1,9 @@
 package io.github.ilmich.tempesta.web.http;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 import io.github.ilmich.tempesta.annotation.Asynchronous;
 import io.github.ilmich.tempesta.annotation.Authenticated;
@@ -16,22 +15,22 @@ import io.github.ilmich.tempesta.web.http.protocol.HttpVerb;
 
 public abstract class HttpRequestHandler extends RequestHandler {
     
-    private final ImmutableMap<HttpVerb, Boolean> asynchVerbs;
-    private final ImmutableMap<HttpVerb, Boolean> authVerbs;
+    private final Map<HttpVerb, Boolean> asynchVerbs;
+    private final Map<HttpVerb, Boolean> authVerbs;
     private final boolean singleton;
     private AuthHandler authHandler;
     
     public HttpRequestHandler() {
 
-        Map<HttpVerb, Boolean> asyncV = Maps.newHashMap();
-        Map<HttpVerb, Boolean> authV = Maps.newHashMap();
+        Map<HttpVerb, Boolean> asyncV = new HashMap<HttpVerb, Boolean>();
+        Map<HttpVerb, Boolean> authV = new HashMap<HttpVerb, Boolean>();
         for (HttpVerb verb : HttpVerb.values()) {
             asyncV.put(verb, isMethodAnnotated(verb, Asynchronous.class));
             authV.put(verb, isMethodAnnotated(verb, Authenticated.class));
         }
 
-        asynchVerbs = ImmutableMap.copyOf(asyncV);
-        authVerbs = ImmutableMap.copyOf(authV);
+        asynchVerbs = Collections.unmodifiableMap(asyncV);
+        authVerbs = Collections.unmodifiableMap(authV);
         singleton = getClass().isAnnotationPresent(SingletonHandler.class);        
     }
     

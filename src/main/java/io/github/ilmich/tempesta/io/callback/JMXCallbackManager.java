@@ -20,42 +20,40 @@
 package io.github.ilmich.tempesta.io.callback;
 
 import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-
-import com.google.common.collect.Lists;
 
 import io.github.ilmich.tempesta.util.MXBeanUtil;
 import io.github.ilmich.tempesta.web.AsyncCallback;
 
 public class JMXCallbackManager implements CallbackManager, CallbackManagerMXBean {
 
-    private final AbstractCollection<AsyncCallback> callbacks = new ConcurrentLinkedQueue<AsyncCallback>();
+	private final AbstractCollection<AsyncCallback> callbacks = new ConcurrentLinkedQueue<AsyncCallback>();
 
-    public JMXCallbackManager() { // instance initialization block
-	MXBeanUtil.registerMXBean(this, "CallbackManager", this.getClass().getSimpleName());
-    }
-
-    @Override
-    public int getNumberOfCallbacks() {
-	return callbacks.size();
-    }
-
-    @Override
-    public void addCallback(AsyncCallback callback) {
-	callbacks.add(callback);
-    }
-
-    @Override
-    public boolean execute() {
-	// makes a defensive copy to avoid (1) CME (new callbacks are added this
-	// iteration) and (2) IO starvation.
-	List<AsyncCallback> defensive = Lists.newLinkedList(callbacks);
-	callbacks.clear();
-	for (AsyncCallback callback : defensive) {
-	    callback.onCallback();
+	public JMXCallbackManager() { // instance initialization block
+		MXBeanUtil.registerMXBean(this, "CallbackManager", this.getClass().getSimpleName());
 	}
-	return !callbacks.isEmpty();
-    }
+
+	@Override
+	public int getNumberOfCallbacks() {
+		return callbacks.size();
+	}
+
+	@Override
+	public void addCallback(AsyncCallback callback) {
+		callbacks.add(callback);
+	}
+
+	@Override
+	public boolean execute() {
+		// makes a defensive copy to avoid (1) CME (new callbacks are added this
+		// iteration) and (2) IO starvation.
+		List<AsyncCallback> defensive = new ArrayList<AsyncCallback>(callbacks);
+		callbacks.clear();
+		for (AsyncCallback callback : defensive) {
+			callback.onCallback();
+		}
+		return !callbacks.isEmpty();
+	}
 }

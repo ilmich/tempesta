@@ -29,11 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
-import com.google.common.base.Strings;
-
 import io.github.ilmich.tempesta.annotation.Path;
 import io.github.ilmich.tempesta.util.ReflectionTools;
+import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 
 /**

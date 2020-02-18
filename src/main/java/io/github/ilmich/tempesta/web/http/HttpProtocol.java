@@ -3,11 +3,9 @@ package io.github.ilmich.tempesta.web.http;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-
-
-import com.google.common.collect.Maps;
 
 import io.github.ilmich.tempesta.io.Protocol;
 import io.github.ilmich.tempesta.web.handler.HandlerFactory;
@@ -17,7 +15,7 @@ public class HttpProtocol extends Protocol {
     /**
      * a queue of half-baked (pending/unfinished) HTTP post request
      */
-    private final Map<SelectableChannel, HttpRequest> partials = Maps.newHashMap();
+    private final Map<SelectableChannel, HttpRequest> partials = new HashMap<SelectableChannel, HttpRequest>();
     
     /**
      * Logger

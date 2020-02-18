@@ -1,14 +1,13 @@
 package io.github.ilmich.tempesta.web.http;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
-
-
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 
 import io.github.ilmich.tempesta.configuration.AnnotationsScanner;
 import io.github.ilmich.tempesta.configuration.Configuration;
 import io.github.ilmich.tempesta.util.HttpUtil;
+import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.handler.BadRequestRequestHandler;
 import io.github.ilmich.tempesta.web.handler.HandlerFactory;
 import io.github.ilmich.tempesta.web.handler.HttpContinueRequestHandler;
@@ -25,19 +24,19 @@ public class HttpHandlerFactory implements HandlerFactory {
      * "Normal/Absolute" (non group capturing) RequestHandlers e.g. "/",
      * "/persons"
      */
-    private ImmutableMap<String, HttpRequestHandler> absoluteHandlers;
+    private Map<String, HttpRequestHandler> absoluteHandlers = new HashMap<String, HttpRequestHandler>();
 
     /**
      * Group capturing RequestHandlers e.g. "/persons/([0-9]+)",
      * "/persons/(\\d{1,3})"
      */
-    private ImmutableMap<String, HttpRequestHandler> capturingHandlers;
+    private Map<String, HttpRequestHandler> capturingHandlers = new HashMap<String, HttpRequestHandler>();
 
     /**
      * A mapping between group capturing RequestHandlers and their corresponding
      * pattern ( e.g. "([0-9]+)" )
      */
-    private ImmutableMap<HttpRequestHandler, Pattern> patterns;
+    private Map<HttpRequestHandler, Pattern> patterns = new HashMap<HttpRequestHandler, Pattern>();
 
     /**
      * The directory where static content (files) will be served from.
@@ -56,10 +55,7 @@ public class HttpHandlerFactory implements HandlerFactory {
     }
     
     public HttpHandlerFactory(Configuration conf) {
-	ImmutableMap.Builder<String, HttpRequestHandler> builder = new ImmutableMap.Builder<String, HttpRequestHandler>();
-	ImmutableMap.Builder<String, HttpRequestHandler> capturingBuilder = new ImmutableMap.Builder<String, HttpRequestHandler>();
-	ImmutableMap.Builder<HttpRequestHandler, Pattern> patternsBuilder = new ImmutableMap.Builder<HttpRequestHandler, Pattern>();
-
+	
 	if (!Strings.isNullOrEmpty(conf.getHandlerPackage()))
 	    conf.addHandlers(new AnnotationsScanner().findHandlers(conf.getHandlerPackage()));
 
@@ -69,16 +65,14 @@ public class HttpHandlerFactory implements HandlerFactory {
 	    if (containsCapturingGroup(group)) {
 		// path ends with capturing group, e.g path ==
 		// "/person/([0-9]+)"
-		capturingBuilder.put(path.substring(0, index + 1), conf.getHandlerMap().get(path));
-		patternsBuilder.put(conf.getHandlerMap().get(path), Pattern.compile(group));
+	    capturingHandlers.put(path.substring(0, index + 1), conf.getHandlerMap().get(path));
+		patterns.put(conf.getHandlerMap().get(path), Pattern.compile(group));
 	    } else {
 		// "normal" path, e.g. path == "/"
-		builder.put(path, conf.getHandlerMap().get(path));
+	    absoluteHandlers.put(path, conf.getHandlerMap().get(path));
 	    }
 	}
-	absoluteHandlers = builder.build();
-	capturingHandlers = capturingBuilder.build();
-	patterns = patternsBuilder.build();
+	
 	staticContentDir = conf.getStaticDirectory();
     }
 
@@ -119,6 +113,9 @@ public class HttpHandlerFactory implements HandlerFactory {
 	// request/user is authenticated
 	// (i.e RequestHandler.getCurrentUser() != null).
 	HttpRequestHandler rh = getHandler(request.getRequestedPath());	
+	if (rh == null) {
+		return NotFoundRequestHandler.getInstance();
+	}
 	rh.setAuthHandler(getAuthHandler());	
 	if (rh.isMethodAuthenticated(request.getMethod())
 		&& (getAuthHandler() == null || !getAuthHandler().isAuthorizedRequest(request))) {	    

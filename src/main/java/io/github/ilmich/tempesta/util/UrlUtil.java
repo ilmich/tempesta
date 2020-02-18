@@ -23,8 +23,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-
-import com.google.common.collect.ImmutableMultimap;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.github.ilmich.tempesta.web.http.HttpRequest;
 
@@ -53,13 +53,12 @@ public class UrlUtil {
         }
     }
     
-    public static ImmutableMultimap<String, String> parseUrlParams(String req) {
+    public static Map<String, String> parseUrlParams(String req) {
 	// codice preso da deft per parsare parametri che sono all'interno di
 	// richieste POST e PUT
 	// provare a sviluppare questa implementazione all'interno di deft.. se
 	// quello si sveglia:)
-	ImmutableMultimap.Builder<String, String> builder = ImmutableMultimap
-			.builder();
+	Map<String, String> builder = new HashMap<String, String>();
 	String[] paramArray;
 	try {
 		paramArray = HttpRequest.PARAM_STRING_PATTERN.split(URLDecoder.decode(req,"UTF-8"));
@@ -75,7 +74,7 @@ public class UrlUtil {
 		}
 	}
 
-	return builder.build();
+	return builder;
     }
 
 }

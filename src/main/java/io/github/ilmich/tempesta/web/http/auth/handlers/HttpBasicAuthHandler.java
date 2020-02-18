@@ -1,9 +1,8 @@
 package io.github.ilmich.tempesta.web.http.auth.handlers;
 
 
-import com.google.common.base.Strings;
-
 import io.github.ilmich.tempesta.util.Base64;
+import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
 import io.github.ilmich.tempesta.web.handler.UnAuthorizedBasicRequestHandler;
 import io.github.ilmich.tempesta.web.http.Request;

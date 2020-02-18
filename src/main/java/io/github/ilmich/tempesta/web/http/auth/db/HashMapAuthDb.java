@@ -1,16 +1,14 @@
 package io.github.ilmich.tempesta.web.http.auth.db;
 
+import java.util.HashMap;
 import java.util.Map;
-
-
-import com.google.common.collect.Maps;
 
 import io.github.ilmich.tempesta.web.http.auth.AuthDb;
 import io.github.ilmich.tempesta.web.http.auth.AuthUser;
 
 public class HashMapAuthDb implements AuthDb {
 
-    private Map<String, AuthUser> users = Maps.newHashMap();
+    private Map<String, AuthUser> users = new HashMap<String, AuthUser>();
 
     public HashMapAuthDb addUser(String username, String password) {
 	this.users.put(username, new AuthUser(username, password));

@@ -19,7 +19,7 @@
  */
 package io.github.ilmich.tempesta.web.http;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 
 public class MalFormedHttpRequest extends HttpRequest {
 
@@ -27,7 +27,7 @@ public class MalFormedHttpRequest extends HttpRequest {
 
     /* Dummy HttpRequest that represents a malformed client HTTP request */
     private MalFormedHttpRequest() {
-        super("GET / Malformed request\r\n", Maps.<String, String> newHashMap(),"");
+        super("GET / Malformed request\r\n", new HashMap<String, String>(),"");
     }
 
     public boolean isFinished(){

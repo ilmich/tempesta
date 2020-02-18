@@ -21,6 +21,7 @@ package io.github.ilmich.tempesta.io.timeout;
 
 import java.nio.channels.SelectableChannel;
 
+import io.github.ilmich.tempesta.util.Closeables;
 import io.github.ilmich.tempesta.web.AsyncCallback;
 
 public class Timeout {
@@ -53,7 +54,7 @@ public class Timeout {
     public static Timeout newKeepAliveTimeout(final SelectableChannel clientChannel, long keepAliveTimeout) {
 	return new Timeout(System.currentTimeMillis() + keepAliveTimeout, new AsyncCallback() {
 	    public void onCallback() {
-		com.google.common.io.Closeables.closeQuietly(clientChannel);
+		Closeables.closeQuietly(clientChannel);
 	    }
 	});
     }

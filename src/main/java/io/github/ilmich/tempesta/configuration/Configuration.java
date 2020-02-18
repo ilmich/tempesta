@@ -19,11 +19,10 @@
  */
 package io.github.ilmich.tempesta.configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
-
+import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 
@@ -57,7 +56,7 @@ public class Configuration {
     /**
      * Contains manually mapped handlers
      */
-    private final Map<String, HttpRequestHandler> handlerMap = Maps.newHashMap();
+    private final Map<String, HttpRequestHandler> handlerMap = new HashMap<String, HttpRequestHandler>();
 
 
     /**

@@ -23,18 +23,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-
-import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Maps;
-
 import io.github.ilmich.tempesta.io.buffer.DynamicByteBuffer;
+import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.http.protocol.HttpVerb;
 
 /**
@@ -47,7 +44,7 @@ public class HttpRequest implements Request {
     private  String requestedPath; // correct name?
     private  String version;
     private Map<String, String> headers;
-    private ImmutableMultimap<String, String> parameters;
+    private Map<String, Collection<String>> parameters;
     private String body;
     private boolean keepAlive;
     private InetAddress remoteHost;
@@ -59,8 +56,8 @@ public class HttpRequest implements Request {
     private int contentLength = -1;
     private int chunkedSize = 0;
     private DynamicByteBuffer bodyBuffer;
-    private Charset mainCharset = Charsets.US_ASCII;
-    private Map<String, Object> ctx = Maps.newHashMap();
+    private Charset mainCharset = Charset.forName("ASCII");
+    private Map<String, Object> ctx = new HashMap<String, Object>();
 
 
     /** Regex to parse HttpRequest Request Line */
@@ -76,7 +73,7 @@ public class HttpRequest implements Request {
 
 
     public HttpRequest(){
-        headers = Maps.newHashMap();
+        headers = new HashMap<String, String>();
     }
 
     /**
@@ -147,7 +144,7 @@ public class HttpRequest implements Request {
 
     @Override
     public Map<String, Collection<String>> getParameters() {
-        return parameters.asMap();
+        return parameters;
     }
 
     @Override
@@ -233,7 +230,7 @@ public class HttpRequest implements Request {
      * parameter. If no values are found an empty collection is returned.
      */
     @Override
-    public Collection<String> getParameterValues(String name) {
+    public Collection<String> getParameterValues(String name) {    	
         return parameters.get(name);
     }
 
@@ -273,8 +270,8 @@ public class HttpRequest implements Request {
         return result;
     }
 
-    private ImmutableMultimap<String, String> parseParameters(String params) {
-        ImmutableMultimap.Builder<String, String> builder = ImmutableMultimap.builder();
+    private Map<String, Collection<String>> parseParameters(String params) {
+        Map<String, Collection<String>> builder = new HashMap<String, Collection<String>>();
 
             String[] paramArray = PARAM_STRING_PATTERN.split(params);
             for (String keyValue : paramArray) {
@@ -288,11 +285,16 @@ public class HttpRequest implements Request {
                 	} catch (UnsupportedEncodingException e) {
                 		// Should not happen
                 	}
-                	builder.put(keyValueArray[0], value);
+                	Collection<String> p = builder.get(keyValueArray[0]);
+                	if (p == null) {
+                		p = new ArrayList<String>();
+                		builder.put(keyValueArray[0], p);
+                	}
+                	p.add(value);
                 }
             }
 
-        return builder.build();
+        return builder;
     }
 
     /**
@@ -300,7 +302,7 @@ public class HttpRequest implements Request {
      */
     private void parseCookies() {
         String cookiesHeader = Strings.nullToEmpty(getHeader("Cookie")).trim();
-        cookies = Maps.newHashMap();
+        cookies = new HashMap<String, String>();
         if (!cookiesHeader.equals("")) {
             String[] cookiesStrings = COOKIE_SEPARATOR_PATTERN.split(cookiesHeader);
             for (String cookieString : cookiesStrings) {

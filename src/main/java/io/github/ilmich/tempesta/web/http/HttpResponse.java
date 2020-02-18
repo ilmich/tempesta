@@ -29,16 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
-
 import io.github.ilmich.tempesta.io.buffer.DynamicByteBuffer;
+import io.github.ilmich.tempesta.util.Closeables;
 import io.github.ilmich.tempesta.util.CookieUtil;
 import io.github.ilmich.tempesta.util.DateUtil;
 import io.github.ilmich.tempesta.util.HttpUtil;
+import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
 public class HttpResponse implements Response {
@@ -48,11 +44,11 @@ public class HttpResponse implements Response {
     private HttpStatus status = HttpStatus.SUCCESS_OK;
 
     private final Map<String, String> headers = new HashMap<String, String>();
-    private final Map<String, String> cookies = Maps.newHashMap();
+    private final Map<String, String> cookies = new HashMap<String, String>();
     private boolean headersCreated = false;
     private DynamicByteBuffer responseData = DynamicByteBuffer.allocate(HttpServerDescriptor.WRITE_BUFFER_SIZE);
     private FileChannel file;
-    private Charset mainCharset = Charsets.US_ASCII;
+    private Charset mainCharset = Charset.forName("ASCII");
 
     private boolean createETag;
 
@@ -122,9 +118,11 @@ public class HttpResponse implements Response {
             throw new IllegalArgumentException("Cookie name is not valid");
         }
         StringBuffer sb = new StringBuffer(name.trim() + "=" + Strings.nullToEmpty(value).trim() + "; ");
-        if (CharMatcher.JAVA_ISO_CONTROL.countIn(sb) > 0) {
+        
+        /*if (CharMatcher.JAVA_ISO_CONTROL.countIn(sb) > 0) {
             throw new IllegalArgumentException("Invalid cookie " + name + ": " + value);
-        }
+        }*/
+        
         if (expiration >= 0) {
             if (expiration == 0) {
                 sb.append("Expires=" + DateUtil.getDateAsString(new Date(0)) + "; ");
@@ -212,7 +210,7 @@ public class HttpResponse implements Response {
         } catch (IOException e) {
             logger.severe("Error writing (static file "+file.getAbsolutePath()+") to response: "+ e.getMessage());
             // If an exception occurs here we should ensure that file is closed
-            com.google.common.io.Closeables.closeQuietly(in);
+            Closeables.closeQuietly(in);
         }
 
         return 0;

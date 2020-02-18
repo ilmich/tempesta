@@ -16,7 +16,7 @@ public class HttpServerBuilder {
 	conn.setIoHandler(hndl);	
 	hndl.setConnector(conn);
 	
-	instance.addConnector(conn);
+	instance.addConnector(conn);	
 	
 	return this;
     }
