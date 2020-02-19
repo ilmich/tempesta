@@ -52,12 +52,15 @@ public class HttpRequestDispatcher {
                 case PUT:
                     rh.put(request, response);
                     break;
+                case PATCH:
+                	rh.patch(request, response);
+                	break;
                 case DELETE:
                     rh.delete(request, response);
                     break;
                 case OPTIONS:
                     rh.option(request, response);
-                    break;
+                    break;                   
                 case TRACE:
                 case CONNECT:
                 default:

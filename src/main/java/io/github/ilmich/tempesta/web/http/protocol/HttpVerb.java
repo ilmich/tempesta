@@ -54,6 +54,10 @@ public enum HttpVerb {
      */
     PUT,
     /**
+     * 
+     */
+    PATCH,
+    /**
      * &quot;The DELETE method requests that the origin server delete the
      * resource identified by the Request-URI.&quot; (RFC 2616, 9.7)
      */

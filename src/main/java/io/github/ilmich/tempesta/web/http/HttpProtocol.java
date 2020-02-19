@@ -57,6 +57,7 @@ public class HttpProtocol extends Protocol {
 		// TODO: add pre http pipelina handlers
 		HttpRequestHandler rh = (HttpRequestHandler) factory.getHandler(request);
 		HttpRequestDispatcher.dispatch(rh, (HttpRequest) request, response);
+		response.setContentType(rh.getContentType(request.getMethod()));
 		// TODO: add post http pipelina handlers
 		response.setHeader("Server", "Tempesta/0.5.0");
 		response.prepare();
