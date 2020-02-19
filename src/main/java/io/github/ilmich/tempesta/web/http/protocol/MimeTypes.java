@@ -22,7 +22,7 @@ package io.github.ilmich.tempesta.web.http.protocol;
 /**
  * A collection of known content types, for convenience.
  */
-public class ContentType {
+public class MimeTypes {
 
     /** application/xml */
     public static final String APPLICATION_XML = "application/xml";
