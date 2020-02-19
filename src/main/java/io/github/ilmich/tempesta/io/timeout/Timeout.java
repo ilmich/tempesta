@@ -20,8 +20,9 @@
 package io.github.ilmich.tempesta.io.timeout;
 
 import java.nio.channels.SelectableChannel;
+import java.nio.channels.SocketChannel;
 
-import io.github.ilmich.tempesta.util.Closeables;
+import io.github.ilmich.tempesta.io.connectors.ServerConnector;
 import io.github.ilmich.tempesta.web.AsyncCallback;
 
 public class Timeout {
@@ -29,7 +30,7 @@ public class Timeout {
 	private final long timeout;
 	private final AsyncCallback cb;
 	private boolean cancelled = false;
-
+	
 	public Timeout(long timeout, AsyncCallback cb) {
 		this.timeout = timeout;
 		this.cb = cb;
@@ -51,12 +52,12 @@ public class Timeout {
 		return cancelled ? AsyncCallback.nopCb : cb;
 	}
 
-	public static Timeout newKeepAliveTimeout(final SelectableChannel clientChannel, long keepAliveTimeout) {
+	public static Timeout newKeepAliveTimeout(SelectableChannel clientChannel, long keepAliveTimeout,
+			ServerConnector conn) {
 		return new Timeout(System.currentTimeMillis() + keepAliveTimeout, new AsyncCallback() {
 			public void onCallback() {
-				Closeables.closeQuietly(clientChannel);
+				conn.closeChannel((SocketChannel) clientChannel);
 			}
 		});
 	}
-
 }

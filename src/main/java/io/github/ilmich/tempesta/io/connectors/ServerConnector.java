@@ -119,7 +119,7 @@ public class ServerConnector extends Thread {
 					} catch (CancelledKeyException ex) {
 						logger.severe("CancelledKeyException received: " + ex.getMessage());
 					} catch (IOException ex) {
-						Closeables.closeQuietly(key.channel());
+						closeChannel((SocketChannel) key.channel());
 					}
 				}
 				long ms = tm.execute();
@@ -186,7 +186,7 @@ public class ServerConnector extends Thread {
 	}
 
 	public void prolongKeepAliveTimeout(SelectableChannel channel) {
-		addKeepAliveTimeout(channel, Timeout.newKeepAliveTimeout(channel, HttpServerDescriptor.KEEP_ALIVE_TIMEOUT));
+		addKeepAliveTimeout(channel, Timeout.newKeepAliveTimeout(channel, HttpServerDescriptor.KEEP_ALIVE_TIMEOUT, this));
 	}
 
 	public void closeOrRegisterForRead(SelectionKey key, boolean keepAlive) throws IOException {
