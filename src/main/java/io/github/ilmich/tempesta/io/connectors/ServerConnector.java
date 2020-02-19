@@ -28,7 +28,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import io.github.ilmich.tempesta.io.IOHandler;
 import io.github.ilmich.tempesta.io.callback.CallbackManager;
@@ -36,16 +35,18 @@ import io.github.ilmich.tempesta.io.callback.JMXCallbackManager;
 import io.github.ilmich.tempesta.io.timeout.JMXTimeoutManager;
 import io.github.ilmich.tempesta.io.timeout.Timeout;
 import io.github.ilmich.tempesta.util.Closeables;
+import io.github.ilmich.tempesta.util.Log;
 import io.github.ilmich.tempesta.web.http.HttpServerDescriptor;
 
 public class ServerConnector extends Thread {
+	
+	private static final String TAG = "ServerConnector";
 
 	// private int port;
 	private ServerSocketChannel serverChannel;
 	private Selector selector;
 	private final CallbackManager cm = new JMXCallbackManager();
 	private final JMXTimeoutManager tm = new JMXTimeoutManager();
-	private final Logger logger = Logger.getLogger(ServerConnector.class.getName());
 	private IOHandler ioHandler;
 	private boolean isRunning = false;
 
@@ -117,7 +118,7 @@ public class ServerConnector extends Thread {
 							continue;
 						}
 					} catch (CancelledKeyException ex) {
-						logger.severe("CancelledKeyException received: " + ex.getMessage());
+						Log.error(TAG, "CancelledKeyException received: " + ex.getMessage());
 					} catch (IOException ex) {
 						closeChannel((SocketChannel) key.channel());
 					}
@@ -143,20 +144,20 @@ public class ServerConnector extends Thread {
 			serverChannel = ServerSocketChannel.open();
 			boolean reuse = serverChannel.socket().getReuseAddress();
 			if (!reuse) {
-				logger.config("Enabling SO_REUSEADDR (was disabled)");
+				Log.trace(TAG, "Enabling SO_REUSEADDR (was disabled)");
 				serverChannel.socket().setReuseAddress(true);
 			}
 			serverChannel.configureBlocking(false);
 		} catch (IOException e) {
-			logger.severe("Error creating ServerSocketChannel: " + e.getMessage());
+			Log.error(TAG, "Error creating ServerSocketChannel: " + e.getMessage());
 		}
 
 		try {
 			serverChannel.socket().bind(endpoint);
 		} catch (IOException e) {
-			logger.severe("Could not bind socket: " + e.getMessage());
+			Log.error(TAG, "Could not bind socket: " + e.getMessage());
 		}
-		logger.fine("Listen to " + endpoint.toString());
+		Log.info(TAG, "Listen to " + endpoint.toString());
 	}
 
 	public void registerChannel(SocketChannel channel, int interestOps) throws IOException {
@@ -196,7 +197,7 @@ public class ServerConnector extends Thread {
 				key.selector().wakeup();
 				prolongKeepAliveTimeout(key.channel());
 			} catch (IOException ex) {
-				logger.severe("IOException while registrating key for read: " + ex.getMessage());
+				Log.error(TAG, "IOException while registrating key for read: " + ex.getMessage());
 				throw ex;
 			}
 		} else {

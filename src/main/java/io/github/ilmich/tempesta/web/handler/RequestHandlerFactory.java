@@ -19,18 +19,14 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-import java.util.logging.Logger;
+import io.github.ilmich.tempesta.util.Log;
 
 /**
  * Factory for the creation and retrieval of <code>RequestHandler</code> types.
  */
 public class RequestHandlerFactory {
-
-	/**
-	 * The <code>Logger</code>.
-	 */
-	private final static Logger logger = Logger.getLogger(RequestHandlerFactory.class.getName());
-
+	
+	private static final String TAG = "RequestHandlerFactory";
 	/**
 	 * Clone the given instance of <code>RequestHandler</code>.
 	 * 
@@ -44,7 +40,7 @@ public class RequestHandlerFactory {
 			try {
 				return (T) handler.clone();
 			} catch (CloneNotSupportedException e) {
-				logger.severe("Could not clone RequestHandler: " + e.getMessage());
+				Log.error(TAG, "Could not clone RequestHandler: " + e.getMessage());
 			}
 		}
 		return null;

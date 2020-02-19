@@ -27,19 +27,19 @@ import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import io.github.ilmich.tempesta.io.buffer.DynamicByteBuffer;
 import io.github.ilmich.tempesta.util.Closeables;
 import io.github.ilmich.tempesta.util.CookieUtil;
 import io.github.ilmich.tempesta.util.DateUtil;
 import io.github.ilmich.tempesta.util.HttpUtil;
+import io.github.ilmich.tempesta.util.Log;
 import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
 public class HttpResponse implements Response {
 
-	private final static Logger logger = Logger.getLogger(HttpResponse.class.getName());
+	private static final String TAG = "HttpResponse";
 
 	private HttpStatus status = HttpStatus.SUCCESS_OK;
 
@@ -215,7 +215,7 @@ public class HttpResponse implements Response {
 			in = new FileInputStream(file);
 			this.file = in.getChannel();
 		} catch (IOException e) {
-			logger.severe("Error writing (static file " + file.getAbsolutePath() + ") to response: " + e.getMessage());
+			Log.error(TAG, "Error writing (static file " + file.getAbsolutePath() + ") to response: " + e.getMessage());
 			// If an exception occurs here we should ensure that file is closed
 			Closeables.closeQuietly(in);
 		}

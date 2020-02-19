@@ -19,9 +19,8 @@
  */
 package io.github.ilmich.tempesta.web.http;
 
-import java.util.logging.Logger;
-
 import io.github.ilmich.tempesta.util.ExceptionUtils;
+import io.github.ilmich.tempesta.util.Log;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 import io.github.ilmich.tempesta.web.http.protocol.HttpVerb;
 
@@ -32,9 +31,9 @@ import io.github.ilmich.tempesta.web.http.protocol.HttpVerb;
  */
 public class HttpRequestDispatcher {
 
-	private static final Logger logger = Logger.getLogger(HttpRequestDispatcher.class.getName());
+	private static final String TAG = "HttpRequestDispatcher";
 
-	public static void dispatch(HttpRequestHandler rh, HttpRequest request, HttpResponse response) {
+	public void dispatch(HttpRequestHandler rh, HttpRequest request, HttpResponse response) {
 		if (rh != null) {
 			HttpVerb method = request.getMethod();
 			try {
@@ -63,21 +62,21 @@ public class HttpRequestDispatcher {
 				case TRACE:
 				case CONNECT:
 				default:
-					logger.warning("Unimplemented Http metod received: " + method);
+					Log.warn(TAG, "Unimplemented Http metod received: " + method);
 					response.reset();
 					response.setStatus(HttpStatus.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 				}
 			} catch (HttpException he) {
 				response.reset();
 				response.setStatus(he.getStatus());
-				logger.severe(ExceptionUtils.getStackTrace(he));
-				logger.severe(request.toString());
+				Log.error(TAG, ExceptionUtils.getStackTrace(he));
+				Log.error(TAG, request.toString());
 				response.write(ExceptionUtils.getStackTrace(he));
 			} catch (Exception ex) {
 				response.reset();
 				response.setStatus(HttpStatus.SERVER_ERROR_INTERNAL_SERVER_ERROR);
-				logger.severe(ExceptionUtils.getStackTrace(ex));
-				logger.severe(request.toString());
+				Log.error(TAG, ExceptionUtils.getStackTrace(ex));
+				Log.error(TAG, request.toString());
 				response.write(ExceptionUtils.getStackTrace(ex));
 			}
 		}

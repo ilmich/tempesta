@@ -15,8 +15,7 @@ public class HttpServer {
 		ServerConnector conn = iter.next();
 		while (iter.hasNext()) {
 			iter.next().start();
-		}
-		;
+		}		
 		conn.startAndWait();
 	}
 
@@ -24,16 +23,14 @@ public class HttpServer {
 		Iterator<ServerConnector> iter = connectors.iterator();
 		while (iter.hasNext()) {
 			iter.next().start();
-		}
-		;
+		}		
 	}
 
 	public void stop() {
 		Iterator<ServerConnector> iter = connectors.iterator();
 		while (iter.hasNext()) {
 			iter.next().shutDown();
-		}
-		;
+		}		
 	}
 
 	public void setConnectors(List<ServerConnector> connectors) {

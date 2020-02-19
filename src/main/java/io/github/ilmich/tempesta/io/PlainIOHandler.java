@@ -9,26 +9,25 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
-import java.util.logging.Logger;
 
 import io.github.ilmich.tempesta.io.connectors.ServerConnector;
 import io.github.ilmich.tempesta.io.threads.TempestaThreadPoolExecutor;
 import io.github.ilmich.tempesta.util.ExceptionUtils;
+import io.github.ilmich.tempesta.util.Log;
 import io.github.ilmich.tempesta.web.http.HttpServerDescriptor;
 import io.github.ilmich.tempesta.web.http.Request;
 import io.github.ilmich.tempesta.web.http.Response;
 
 public class PlainIOHandler implements IOHandler {
+	
+	private static final String TAG = "PlainIOHandler";
 
 	private ExecutorService executor = new TempestaThreadPoolExecutor(HttpServerDescriptor.MIN_THREADS_PROCESSOR,
 			HttpServerDescriptor.MAX_THREADS_PROCESSOR, HttpServerDescriptor.KEEP_ALIVE_TIMEOUT, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
-
-	private final Logger logger = Logger.getLogger(PlainIOHandler.class.getName());
 
 	private ServerConnector connector = null;
 
@@ -62,7 +61,7 @@ public class PlainIOHandler implements IOHandler {
 				connector.registerChannel(clientChannel, SelectionKey.OP_READ);
 			}
 		} catch (IOException ex) {
-			logger.severe("Error accepting connection: " + ex.getMessage());
+			Log.error(TAG, "Error accepting connection: " + ex.getMessage());
 		}
 	}
 
@@ -109,14 +108,14 @@ public class PlainIOHandler implements IOHandler {
 							try {
 								connector.registerChannel(client, SelectionKey.OP_WRITE, t);
 							} catch (IOException ex) {
-								logger.severe("Error when processing request: " + ExceptionUtils.getStackTrace(ex));
-								logger.severe(req.toString());
+								Log.error(TAG, "Error when processing request: " + ExceptionUtils.getStackTrace(ex));
+								Log.error(TAG, req.toString());
 								connector.removeKeepAliveTimeout(client);
 								connector.closeChannel(client);
 							}
 						} else {
-							logger.severe("Error when processing request: " + ExceptionUtils.getStackTrace(u));
-							logger.severe(req.toString());
+							Log.error(TAG, "Error when processing request: " + ExceptionUtils.getStackTrace(u));
+							Log.error(TAG, req.toString());
 							connector.removeKeepAliveTimeout(client);
 							connector.closeChannel(client);
 						}
@@ -127,11 +126,11 @@ public class PlainIOHandler implements IOHandler {
 			}
 
 		} catch (ClosedChannelException ex) {
-			logger.fine("ClosedChannelException when reading: client disconnect");
+			Log.trace(TAG, "ClosedChannelException when reading: client disconnect");
 			connector.removeKeepAliveTimeout(client);
 			throw ex;
 		} catch (IOException ex) {
-			logger.severe("IOException when reading: " + ex.getMessage());
+			Log.error(TAG, "IOException when reading: " + ex.getMessage());
 			connector.removeKeepAliveTimeout(client);
 			throw ex;
 		}
@@ -168,7 +167,7 @@ public class PlainIOHandler implements IOHandler {
 			}
 
 		} catch (IOException ex) {
-			logger.severe("Error writing on channel: " + ex.getMessage());
+			Log.error(TAG, "Error writing on channel: " + ex.getMessage());
 			connector.removeKeepAliveTimeout(client);
 			throw ex;
 		}

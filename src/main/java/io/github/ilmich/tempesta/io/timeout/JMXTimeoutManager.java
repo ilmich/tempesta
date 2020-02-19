@@ -21,21 +21,18 @@ package io.github.ilmich.tempesta.io.timeout;
 
 import java.nio.channels.SelectableChannel;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
-import io.github.ilmich.tempesta.util.MXBeanUtil;
+import io.github.ilmich.tempesta.util.Log;
 import io.github.ilmich.tempesta.web.AsyncCallback;
 
 public class JMXTimeoutManager implements TimeoutManager, TimeoutManagerMXBean {
 
-	private final Logger logger = Logger.getLogger(JMXTimeoutManager.class.getName());
-
+	private static final String TAG = "JMXTimeoutManager";
 	private final TreeSet<Timeout> timeouts = new TreeSet<Timeout>(new TimeoutComparator());
 	private final TreeSet<DecoratedTimeout> keepAliveTimeouts = new TreeSet<JMXTimeoutManager.DecoratedTimeout>();
 	private final Map<SelectableChannel, DecoratedTimeout> index = new ConcurrentHashMap<SelectableChannel, JMXTimeoutManager.DecoratedTimeout>();
@@ -92,7 +89,7 @@ public class JMXTimeoutManager implements TimeoutManager, TimeoutManagerMXBean {
 		for (DecoratedTimeout decoratedTimeout : defensive) {
 			decoratedTimeout.timeout.getCallback().onCallback();
 			index.remove(decoratedTimeout.channel);
-			logger.fine("Keepalive Timeout triggered: ");
+			Log.trace(TAG, "Keepalive Timeout triggered: ");
 		}
 
 		return keepAliveTimeouts.isEmpty() ? Long.MAX_VALUE
@@ -113,7 +110,7 @@ public class JMXTimeoutManager implements TimeoutManager, TimeoutManagerMXBean {
 			candidate.getCallback().onCallback();
 			iter.remove();
 			timeouts.remove(candidate);
-			logger.fine("Timeout triggered: ");
+			Log.trace(TAG, "Timeout triggered: ");
 		}
 		return timeouts.isEmpty() ? Long.MAX_VALUE : Math.max(1, timeouts.iterator().next().getTimeout() - now);
 	}
