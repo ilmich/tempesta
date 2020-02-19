@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import io.github.ilmich.tempesta.util.MXBeanUtil;
 import io.github.ilmich.tempesta.web.AsyncCallback;
 
 public class JMXCallbackManager implements CallbackManager, CallbackManagerMXBean {
@@ -32,8 +31,7 @@ public class JMXCallbackManager implements CallbackManager, CallbackManagerMXBea
 	private final AbstractCollection<AsyncCallback> callbacks = new ConcurrentLinkedQueue<AsyncCallback>();
 
 	public JMXCallbackManager() { // instance initialization block
-		// MXBeanUtil.registerMXBean(this, "CallbackManager",
-		// this.getClass().getSimpleName());
+
 	}
 
 	@Override
