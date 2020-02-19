@@ -213,6 +213,10 @@ public class ServerConnector extends Thread {
 		this.ioHandler.attachServerConnector(this);
 	}
 
+	public void shutDown() {
+		this.isRunning = false;
+	}
+	
 	public void startAndWait() {
 		this.start();
 		this.isRunning = true;

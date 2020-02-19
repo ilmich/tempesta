@@ -29,7 +29,7 @@ public class HttpServer  {
     public void stop() {
 	Iterator<ServerConnector> iter = connectors.iterator();	
 	while (iter.hasNext()) {
-	    iter.next().stop();
+	    iter.next().shutDown();
 	};
     }
 

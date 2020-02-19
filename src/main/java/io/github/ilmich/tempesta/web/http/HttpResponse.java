@@ -73,16 +73,18 @@ public class HttpResponse implements Response {
 	return false;
     }
 
-    public void setStatus(HttpStatus status) {
+    public Response setStatus(HttpStatus status) {
         this.status = status;
+        return this;
     }
     
     public void setCreateETag(boolean create) {
         createETag = create;
     }
 
-    public void setHeader(String header, String value) {
+    public Response setHeader(String header, String value) {
         headers.put(header, value);
+        return this;
     }
 
     public void setCookie(String name, String value) {
@@ -159,6 +161,10 @@ public class HttpResponse implements Response {
     public Response write(byte[] data) {
         responseData.put(data);
         return this;
+    }
+    
+    public Response setContentType(String contentType) {
+    	return setHeader("Content-Type", contentType);    	
     }
     
     public void prepare() {

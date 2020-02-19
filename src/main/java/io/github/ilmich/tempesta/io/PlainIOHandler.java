@@ -10,10 +10,13 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 import io.github.ilmich.tempesta.io.connectors.ServerConnector;
+import io.github.ilmich.tempesta.io.threads.TempestaThreadPoolExecutor;
 import io.github.ilmich.tempesta.util.ExceptionUtils;
 import io.github.ilmich.tempesta.web.http.HttpServerDescriptor;
 import io.github.ilmich.tempesta.web.http.Request;
@@ -21,15 +24,12 @@ import io.github.ilmich.tempesta.web.http.Response;
 
 public class PlainIOHandler implements IOHandler {
 
-	private ExecutorService executor = Executors.newCachedThreadPool();
-	// rework a better thread pools
-	/*
-	 * MoreExecutors.listeningDecorator(new ThreadPoolExecutor(
-	 * HttpServerDescriptor.MIN_THREADS_PROCESSOR, // number of core threads
-	 * HttpServerDescriptor.MAX_THREADS_PROCESSOR, // number of max threads
-	 * HttpServerDescriptor.THREAD_PROCESSOR_IDLE_TIME, // thread idle time
-	 * TimeUnit.SECONDS, new SynchronousQueue<Runnable>()));
-	 */
+	private ExecutorService executor = new TempestaThreadPoolExecutor(HttpServerDescriptor.MIN_THREADS_PROCESSOR, 
+			HttpServerDescriptor.MAX_THREADS_PROCESSOR, 
+			HttpServerDescriptor.KEEP_ALIVE_TIMEOUT, 
+			TimeUnit.SECONDS, 
+			new SynchronousQueue<Runnable>());
+
 	private final Logger logger = Logger.getLogger(PlainIOHandler.class.getName());
 
 	private ServerConnector connector = null;

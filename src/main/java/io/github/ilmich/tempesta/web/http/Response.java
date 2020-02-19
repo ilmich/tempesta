@@ -82,9 +82,9 @@ public interface Response {
     
     public boolean isKeepAlive();
     
-    public void setStatus(HttpStatus status);
+    public Response setStatus(HttpStatus status);
 
-    public void setHeader(String header, String value);
+    public Response setHeader(String header, String value);
 
     public void setCookie(String name, String value);
 
