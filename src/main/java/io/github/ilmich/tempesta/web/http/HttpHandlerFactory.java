@@ -4,20 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.xml.ws.spi.http.HttpHandler;
-
-import io.github.ilmich.tempesta.configuration.AnnotationsScanner;
 import io.github.ilmich.tempesta.configuration.Configuration;
 import io.github.ilmich.tempesta.util.HttpUtil;
-import io.github.ilmich.tempesta.util.Strings;
 import io.github.ilmich.tempesta.web.handler.BadRequestRequestHandler;
 import io.github.ilmich.tempesta.web.handler.HandlerFactory;
 import io.github.ilmich.tempesta.web.handler.HttpContinueRequestHandler;
 import io.github.ilmich.tempesta.web.handler.NotFoundRequestHandler;
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
-import io.github.ilmich.tempesta.web.handler.RequestHandlerFactory;
 import io.github.ilmich.tempesta.web.handler.StaticContentHandler;
-import io.github.ilmich.tempesta.web.handler.UnAuthorizedBasicRequestHandler;
 import io.github.ilmich.tempesta.web.http.auth.AuthHandler;
 
 public class HttpHandlerFactory implements HandlerFactory {
@@ -57,8 +51,8 @@ public class HttpHandlerFactory implements HandlerFactory {
 
 	public HttpHandlerFactory(Configuration conf) {
 
-		if (!Strings.isNullOrEmpty(conf.getHandlerPackage()))
-			conf.addHandlers(new AnnotationsScanner().findHandlers(conf.getHandlerPackage()));
+		/*if (!Strings.isNullOrEmpty(conf.getHandlerPackage()))
+			conf.addHandlers(new AnnotationsScanner().findHandlers(conf.getHandlerPackage()));*/
 
 		for (String path : conf.getHandlerMap().keySet()) {
 			addRoute(path, conf.getHandlerMap().get(path));
@@ -99,10 +93,12 @@ public class HttpHandlerFactory implements HandlerFactory {
 					return rh;
 				}
 			} else {
-				return (rh.isSingleton()) ? rh : RequestHandlerFactory.cloneHandler(rh);
+				return rh;
+				//return (rh.isSingleton()) ? rh : RequestHandlerFactory.cloneHandler(rh);
 			}
 		} else {
-			return (rh.isSingleton()) ? rh : RequestHandlerFactory.cloneHandler(rh);
+			return rh;
+			//return (rh.isSingleton()) ? rh : RequestHandlerFactory.cloneHandler(rh);
 		}
 
 		return NotFoundRequestHandler.getInstance();
@@ -121,11 +117,11 @@ public class HttpHandlerFactory implements HandlerFactory {
 			return NotFoundRequestHandler.getInstance();
 		}
 		rh.setAuthHandler(getAuthHandler());
-		if (rh.isMethodAuthenticated(request.getMethod())
+		/*if (rh.isMethodAuthenticated(request.getMethod())
 				&& (getAuthHandler() == null || !getAuthHandler().isAuthorizedRequest(request))) {
 			return getAuthHandler() == null ? new UnAuthorizedBasicRequestHandler("Unknown")
 					: getAuthHandler().getUnAuthorizedRequestHandler(request);
-		}
+		}*/
 
 		if (request.expectContinue()) {
 			return HttpContinueRequestHandler.getInstance();
