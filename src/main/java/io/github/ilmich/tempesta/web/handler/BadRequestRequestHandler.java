@@ -19,57 +19,55 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-
 import io.github.ilmich.tempesta.web.http.HttpRequest;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 import io.github.ilmich.tempesta.web.http.HttpResponse;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
-
 public class BadRequestRequestHandler extends HttpRequestHandler {
 
-    private final static BadRequestRequestHandler instance = new BadRequestRequestHandler();
+	private final static BadRequestRequestHandler instance = new BadRequestRequestHandler();
 
-    private BadRequestRequestHandler() {
-    }
+	private BadRequestRequestHandler() {
+	}
 
-    public static final BadRequestRequestHandler getInstance() {
-        return instance;
-    }
+	public static final BadRequestRequestHandler getInstance() {
+		return instance;
+	}
 
-    @Override
-    public void get(HttpRequest request, HttpResponse response) {
-        perform(request, response);
-    }
-    
-    @Override
-    public void post(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void get(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void put(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void post(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void delete(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void put(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void head(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void delete(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void option(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void head(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    public void perform(HttpRequest request, HttpResponse response) {
-	response.setStatus(HttpStatus.CLIENT_ERROR_BAD_REQUEST);
-        response.setHeader("Connection", "close");
-        response.write("HTTP 1.1 requests must include the Host: header");
-    }
+	@Override
+	public void option(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
+
+	public void perform(HttpRequest request, HttpResponse response) {
+		response.setStatus(HttpStatus.CLIENT_ERROR_BAD_REQUEST);
+		response.setHeader("Connection", "close");
+		response.write("HTTP 1.1 requests must include the Host: header");
+	}
 }

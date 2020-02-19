@@ -26,27 +26,27 @@ import java.util.logging.Logger;
  */
 public class RequestHandlerFactory {
 
-    /**
-     * The <code>Logger</code>.
-     */
-    private final static Logger logger = Logger.getLogger(RequestHandlerFactory.class.getName());
+	/**
+	 * The <code>Logger</code>.
+	 */
+	private final static Logger logger = Logger.getLogger(RequestHandlerFactory.class.getName());
 
-    /**
-     * Clone the given instance of <code>RequestHandler</code>.
-     * 
-     * @param handler the <code>RequestHandler</code> to clone.
-     * @return a new instance, or <code>null</code> on any problem.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends RequestHandler> T cloneHandler(T handler) {
-    	
-        if (handler != null) {
-            try {
-                return (T) handler.clone();
-            } catch (CloneNotSupportedException e) {
-                logger.severe("Could not clone RequestHandler: " + e.getMessage());
-            }
-        }
-        return null;    
-    }
+	/**
+	 * Clone the given instance of <code>RequestHandler</code>.
+	 * 
+	 * @param handler the <code>RequestHandler</code> to clone.
+	 * @return a new instance, or <code>null</code> on any problem.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends RequestHandler> T cloneHandler(T handler) {
+
+		if (handler != null) {
+			try {
+				return (T) handler.clone();
+			} catch (CloneNotSupportedException e) {
+				logger.severe("Could not clone RequestHandler: " + e.getMessage());
+			}
+		}
+		return null;
+	}
 }

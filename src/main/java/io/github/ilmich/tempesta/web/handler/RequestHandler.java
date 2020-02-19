@@ -19,12 +19,11 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-
 public abstract class RequestHandler implements Cloneable {
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-	return super.clone();
-    }
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 }

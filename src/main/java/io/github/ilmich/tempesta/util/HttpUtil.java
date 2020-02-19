@@ -26,44 +26,43 @@ import java.security.NoSuchAlgorithmException;
 
 import io.github.ilmich.tempesta.web.http.Request;
 
-
 public class HttpUtil {
 
-    /*
-     * MessageDigest are not thread-safe and are expensive to create. Do it
-     * lazily for each thread that need access to one.
-     */
-    private static final ThreadLocal<MessageDigest> md = new ThreadLocal<MessageDigest>();
+	/*
+	 * MessageDigest are not thread-safe and are expensive to create. Do it lazily
+	 * for each thread that need access to one.
+	 */
+	private static final ThreadLocal<MessageDigest> md = new ThreadLocal<MessageDigest>();
 
-    public static boolean verifyRequest(Request request) {
-        String version = request.getVersion();
-        boolean requestOk = true;
-        if (version.equals("HTTP/1.1")) { // TODO might be optimized? Could do
-            // version.endsWith("1"), or similar
-            requestOk = request.getHeader("host") != null;
-        }
+	public static boolean verifyRequest(Request request) {
+		String version = request.getVersion();
+		boolean requestOk = true;
+		if (version.equals("HTTP/1.1")) { // TODO might be optimized? Could do
+			// version.endsWith("1"), or similar
+			requestOk = request.getHeader("host") != null;
+		}
 
-        return requestOk;
-    }
+		return requestOk;
+	}
 
-    public static String getEtag(byte[] bytes) {
-        if (md.get() == null) {
-            try {
-                md.set(MessageDigest.getInstance("MD5"));
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException("MD5 cryptographic algorithm is not available.", e);
-            }
-        }
-        byte[] digest = md.get().digest(bytes);
-        BigInteger number = new BigInteger(1, digest);
-        // prepend a '0' to get a proper MD5 hash
-        return '0' + number.toString(16);
+	public static String getEtag(byte[] bytes) {
+		if (md.get() == null) {
+			try {
+				md.set(MessageDigest.getInstance("MD5"));
+			} catch (NoSuchAlgorithmException e) {
+				throw new RuntimeException("MD5 cryptographic algorithm is not available.", e);
+			}
+		}
+		byte[] digest = md.get().digest(bytes);
+		BigInteger number = new BigInteger(1, digest);
+		// prepend a '0' to get a proper MD5 hash
+		return '0' + number.toString(16);
 
-    }
+	}
 
-    public static String getEtag(File file) {
-        // TODO RS 101011 Implement if etag response header should be present
-        // while static file serving.
-        return "";
-    }
+	public static String getEtag(File file) {
+		// TODO RS 101011 Implement if etag response header should be present
+		// while static file serving.
+		return "";
+	}
 }

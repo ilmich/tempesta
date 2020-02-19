@@ -19,7 +19,6 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-
 import io.github.ilmich.tempesta.web.http.HttpRequest;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 import io.github.ilmich.tempesta.web.http.HttpResponse;
@@ -27,11 +26,10 @@ import io.github.ilmich.tempesta.web.http.Request;
 import io.github.ilmich.tempesta.web.http.Response;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
-
 public class UnAuthorizedBasicRequestHandler extends HttpRequestHandler {
 
-	private String realm;		
-	
+	private String realm;
+
 	public UnAuthorizedBasicRequestHandler(String realm) {
 		super();
 		this.realm = realm;
@@ -47,7 +45,7 @@ public class UnAuthorizedBasicRequestHandler extends HttpRequestHandler {
 
 	@Override
 	public void post(HttpRequest request, HttpResponse response) {
-    	perform(request, response);
+		perform(request, response);
 	}
 
 	@Override
@@ -66,14 +64,14 @@ public class UnAuthorizedBasicRequestHandler extends HttpRequestHandler {
 	}
 
 	@Override
-    public void get(HttpRequest request, HttpResponse response) {
+	public void get(HttpRequest request, HttpResponse response) {
 		perform(request, response);
-    }
-	
+	}
+
 	public void perform(Request request, Response response) {
 		response.setStatus(HttpStatus.CLIENT_ERROR_UNAUTHORIZED);
 		response.setHeader("WWW-Authenticate", "Basic realm=\"" + getRealm() + "\"");
-        response.setHeader("Connection", "close");
-        response.write("Authentication failed");
-	}	
+		response.setHeader("Connection", "close");
+		response.write("Authentication failed");
+	}
 }

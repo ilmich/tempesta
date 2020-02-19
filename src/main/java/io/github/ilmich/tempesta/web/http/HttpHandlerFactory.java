@@ -66,7 +66,7 @@ public class HttpHandlerFactory implements HandlerFactory {
 
 		staticContentDir = conf.getStaticDirectory();
 	}
-	
+
 	public HttpHandlerFactory addRoute(String path, HttpRequestHandler handler) {
 		int index = path.lastIndexOf("/");
 		String group = path.substring(index + 1, path.length());

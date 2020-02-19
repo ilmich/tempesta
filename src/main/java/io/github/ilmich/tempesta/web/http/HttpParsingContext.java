@@ -22,110 +22,101 @@ package io.github.ilmich.tempesta.web.http;
 import java.nio.ByteBuffer;
 
 /**
- * Context object holding data of the currently or last parser execution.
- * Used to maintain buffer position, last Token,
+ * Context object holding data of the currently or last parser execution. Used
+ * to maintain buffer position, last Token,
  */
 public class HttpParsingContext {
 
+	enum TokenType {
+		REQUEST_LINE, REQUEST_METHOD, REQUEST_URI, HTTP_VERSION, HEADER_NAME, HEADER_VALUE, BODY, NO_CHUNK, CHUNK_OCTET,
+		CHUNK;
 
-    enum TokenType{
-        REQUEST_LINE,
-        REQUEST_METHOD,
-        REQUEST_URI,
-        HTTP_VERSION,
-        HEADER_NAME,
-        HEADER_VALUE,
-        BODY,
-        NO_CHUNK,
-        CHUNK_OCTET,
-        CHUNK;
+	}
 
-    }
-    boolean chunked;
+	boolean chunked;
 
-    ByteBuffer buffer;
+	ByteBuffer buffer;
 
-    TokenType currentType = TokenType.REQUEST_LINE;
+	TokenType currentType = TokenType.REQUEST_LINE;
 
-    int skips = 0;
+	int skips = 0;
 
-    StringBuilder tokenValue = new StringBuilder(255);
+	StringBuilder tokenValue = new StringBuilder(255);
 
-    boolean complete = false;
+	boolean complete = false;
 
-    int currentPointer = 0;
+	int currentPointer = 0;
 
-    String lastHeaderName = null;
+	String lastHeaderName = null;
 
-    int chunkSize = 0;
+	int chunkSize = 0;
 
-    int incrementAndGetPointer(){
-        currentPointer = buffer.get();
-        return currentPointer;
-    }
+	int incrementAndGetPointer() {
+		currentPointer = buffer.get();
+		return currentPointer;
+	}
 
-    public boolean tokenGreaterThan(int maxLen) {
-        return tokenValue.length() > maxLen;
-    }
+	public boolean tokenGreaterThan(int maxLen) {
+		return tokenValue.length() > maxLen;
+	}
 
-    void setBuffer(ByteBuffer buffer){
-        this.buffer = buffer;
-    }
+	void setBuffer(ByteBuffer buffer) {
+		this.buffer = buffer;
+	}
 
-    boolean hasRemaining(){
-        return buffer.hasRemaining();
-    }
+	boolean hasRemaining() {
+		return buffer.hasRemaining();
+	}
 
-    void setBodyFound(){
-        currentType = TokenType.BODY;
-        tokenValue.delete(0, Integer.MAX_VALUE);
-    }
+	void setBodyFound() {
+		currentType = TokenType.BODY;
+		tokenValue.delete(0, Integer.MAX_VALUE);
+	}
 
-    public boolean isbodyFound() {
-        return TokenType.BODY.equals(currentType);
-    }
+	public boolean isbodyFound() {
+		return TokenType.BODY.equals(currentType);
+	}
 
-    void clearTokenBuffer(){
-        if (complete){ // Free buffer when last was complete
-            tokenValue.delete(0, Integer.MAX_VALUE);
-        }
-    }
+	void clearTokenBuffer() {
+		if (complete) { // Free buffer when last was complete
+			tokenValue.delete(0, Integer.MAX_VALUE);
+		}
+	}
 
+	void deleteFirstCharFromTokenBuffer() {
+		tokenValue.deleteCharAt(0);
+	}
 
-    void deleteFirstCharFromTokenBuffer(){
-        tokenValue.deleteCharAt(0);
-    }
+	void appendChar() {
+		tokenValue.append((char) currentPointer);
+	}
 
-    void appendChar(){
-        tokenValue.append((char)currentPointer);
-    }
+	/**
+	 * Stores the token value and define the completeness
+	 */
+	void storeIncompleteToken() {
+		storeTokenValue(currentType, false);
+	}
 
-    /**
-     * Stores the token value and define the completeness
-     */
-    void storeIncompleteToken(){
-        storeTokenValue(currentType, false);
-    }
+	void storeCompleteToken(TokenType type) {
+		storeTokenValue(type, true);
+	}
 
-    void storeCompleteToken(TokenType type){
-        storeTokenValue(type, true);
-    }
+	private void storeTokenValue(TokenType type, boolean _complete) {
 
-    private void storeTokenValue(TokenType type, boolean _complete){
+		currentType = type;
+		complete = _complete;
+	}
 
-        currentType = type;
-        complete = _complete;
-    }
+	String getTokenValue() {
+		return tokenValue.toString();
+	}
 
-    String getTokenValue(){
-        return tokenValue.toString();
-    }
+	public void persistHeaderName() {
+		lastHeaderName = tokenValue.toString();
+	}
 
-    public void persistHeaderName() {
-        lastHeaderName = tokenValue.toString();
-    }
-
-    public String getLastHeaderName() {
-        return lastHeaderName;
-    }
+	public String getLastHeaderName() {
+		return lastHeaderName;
+	}
 }

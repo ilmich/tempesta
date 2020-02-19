@@ -19,12 +19,10 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-
 import io.github.ilmich.tempesta.web.http.HttpRequest;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 import io.github.ilmich.tempesta.web.http.HttpResponse;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
-
 
 public class HttpContinueRequestHandler extends HttpRequestHandler {
 

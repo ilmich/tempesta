@@ -24,27 +24,27 @@ package io.github.ilmich.tempesta.web.http.protocol;
  */
 public class MimeTypes {
 
-    /** application/xml */
-    public static final String APPLICATION_XML = "application/xml";
+	/** application/xml */
+	public static final String APPLICATION_XML = "application/xml";
 
-    /** application/json */
-    public static final String APPLICATION_JSON = "application/json";
+	/** application/json */
+	public static final String APPLICATION_JSON = "application/json";
 
-    /** application/x-www-form-urlencoded */
-    public static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded";
+	/** application/x-www-form-urlencoded */
+	public static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded";
 
-    /** application/octet-stream */
-    public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
+	/** application/octet-stream */
+	public static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
 
-    /** multipart/form-data */
-    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+	/** multipart/form-data */
+	public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
-    /** text/html */
-    public static final String TEXT_HTML = "text/html";
+	/** text/html */
+	public static final String TEXT_HTML = "text/html";
 
-    /** text/plain */
-    public static final String TEXT_PLAIN = "text/plain";
+	/** text/plain */
+	public static final String TEXT_PLAIN = "text/plain";
 
-    /** text/xml */
-    public static final String TEXT_XML = "text/xml";
+	/** text/xml */
+	public static final String TEXT_XML = "text/xml";
 }

@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
 
-
 /**
  * Annotation used by implementation of {@link RequestHandler} to denote a
  * method as asynchronous (i.e don't close the Http connection until the client

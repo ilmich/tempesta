@@ -27,39 +27,39 @@ import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
  */
 public class HttpException extends RuntimeException {
 
-    /** Serial Version UID */
-    private static final long serialVersionUID = 8066634515515557043L;
+	/** Serial Version UID */
+	private static final long serialVersionUID = 8066634515515557043L;
 
-    /** The HTTP status for this exception. */
-    private final HttpStatus status;
+	/** The HTTP status for this exception. */
+	private final HttpStatus status;
 
-    /**
-     * Create an instance of this type, with the given <code>HttpStatus</code>
-     * and an empty message.
-     * 
-     * @param status the <code>HttpStatus</code> to apply.
-     */
-    public HttpException(HttpStatus status) {
-        this(status, "");
-    }
+	/**
+	 * Create an instance of this type, with the given <code>HttpStatus</code> and
+	 * an empty message.
+	 * 
+	 * @param status the <code>HttpStatus</code> to apply.
+	 */
+	public HttpException(HttpStatus status) {
+		this(status, "");
+	}
 
-    /**
-     * Create an instance of this type, with the given <code>HttpStatus</code>
-     * and message.
-     * 
-     * @param status the <code>HttpStatus</code> to apply.
-     */
-    public HttpException(HttpStatus status, String message) {
-        super(message);
-        this.status = status;
-    }
+	/**
+	 * Create an instance of this type, with the given <code>HttpStatus</code> and
+	 * message.
+	 * 
+	 * @param status the <code>HttpStatus</code> to apply.
+	 */
+	public HttpException(HttpStatus status, String message) {
+		super(message);
+		this.status = status;
+	}
 
-    /**
-     * Retrieve the <code>HttpStatus</code> represented by this exception.
-     * 
-     * @return the represented <code>HttpStatus</code>.
-     */
-    public HttpStatus getStatus() {
-        return status;
-    }
+	/**
+	 * Retrieve the <code>HttpStatus</code> represented by this exception.
+	 * 
+	 * @return the represented <code>HttpStatus</code>.
+	 */
+	public HttpStatus getStatus() {
+		return status;
+	}
 }

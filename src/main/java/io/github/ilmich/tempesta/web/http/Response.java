@@ -25,79 +25,77 @@ import java.nio.channels.FileChannel;
 import io.github.ilmich.tempesta.io.buffer.DynamicByteBuffer;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
-
 /**
- * An HTTP response build and sent to a client in response to a
- * {@link Request}
+ * An HTTP response build and sent to a client in response to a {@link Request}
  */
 public interface Response {
-    
-    /**
-     * The given data data will be sent as the HTTP response upon next flush or
-     * when the response is finished.
-     * 
-     * @return this for chaining purposes.
-     */
-    Response write(String data);
 
-    /**
-     * The given data data will be sent as the HTTP response upon next flush or
-     * when the response is finished.http://mail.google.com/mail/?shva=1#inbox
-     * 
-     * @param data the data to write.
-     * @return <code>this</code>, for chaining.
-     */
-    Response write(byte[] data);
+	/**
+	 * The given data data will be sent as the HTTP response upon next flush or when
+	 * the response is finished.
+	 * 
+	 * @return this for chaining purposes.
+	 */
+	Response write(String data);
 
-    /**
-     * Experimental support.
-     */
-    long write(File file);
+	/**
+	 * The given data data will be sent as the HTTP response upon next flush or when
+	 * the response is finished.http://mail.google.com/mail/?shva=1#inbox
+	 * 
+	 * @param data the data to write.
+	 * @return <code>this</code>, for chaining.
+	 */
+	Response write(byte[] data);
 
-    /**
-     * Explicit flush.
-     * 
-     * @return the number of bytes that were actually written as the result of
-     *         this flush.
-     */
-    long flush();
+	/**
+	 * Experimental support.
+	 */
+	long write(File file);
 
-    /**
-     * Should only be invoked by third party asynchronous request handlers (or
-     * by the AWF framework for synchronous request handlers). If no previous
-     * (explicit) flush is invoked, the "Content-Length" and (where configured)
-     * "ETag" header will be calculated and inserted to the HTTP response.
-     * 
-     * @see #setCreateETag(boolean)
-     */
-    long finish();
-    
-    public void reset();
-    
-    public void prepare();
-    
-    public DynamicByteBuffer getResponseData();
-    
-    public FileChannel getFile();
-    
-    public boolean isKeepAlive();
-    
-    public Response setStatus(HttpStatus status);
+	/**
+	 * Explicit flush.
+	 * 
+	 * @return the number of bytes that were actually written as the result of this
+	 *         flush.
+	 */
+	long flush();
 
-    public Response setHeader(String header, String value);
+	/**
+	 * Should only be invoked by third party asynchronous request handlers (or by
+	 * the AWF framework for synchronous request handlers). If no previous
+	 * (explicit) flush is invoked, the "Content-Length" and (where configured)
+	 * "ETag" header will be calculated and inserted to the HTTP response.
+	 * 
+	 * @see #setCreateETag(boolean)
+	 */
+	long finish();
 
-    public void setCookie(String name, String value);
+	public void reset();
 
-    public void setCookie(String name, String value, long expiration);
+	public void prepare();
 
-    public void setCookie(String name, String value, String domain);
+	public DynamicByteBuffer getResponseData();
 
-    public void setCookie(String name, String value, String domain, String path);
+	public FileChannel getFile();
 
-    public void setCookie(String name, String value, long expiration, String domain);
+	public boolean isKeepAlive();
 
-    public void setCookie(String name, String value, long expiration, String domain, String path);
+	public Response setStatus(HttpStatus status);
 
-    public void clearCookie(String name);
+	public Response setHeader(String header, String value);
+
+	public void setCookie(String name, String value);
+
+	public void setCookie(String name, String value, long expiration);
+
+	public void setCookie(String name, String value, String domain);
+
+	public void setCookie(String name, String value, String domain, String path);
+
+	public void setCookie(String name, String value, long expiration, String domain);
+
+	public void setCookie(String name, String value, long expiration, String domain, String path);
+
+	public void clearCookie(String name);
 
 }

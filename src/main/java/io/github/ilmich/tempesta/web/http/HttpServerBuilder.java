@@ -21,6 +21,14 @@ public class HttpServerBuilder {
 		return this;
 	}
 
+	public HttpServerBuilder addRoute(String route, HttpRequestHandler handler) {
+		if (this.protocol.getFactory() == null) {
+			this.protocol.setFactory(new HttpHandlerFactory());
+		}
+		this.protocol.getFactory().addRoute(route, handler);
+		return this;
+	}
+
 	public HttpServerBuilder setHandlerFactory(HandlerFactory factory) {
 		this.protocol.setFactory(factory);
 		return this;

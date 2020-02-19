@@ -8,8 +8,8 @@ import io.github.ilmich.tempesta.web.http.Response;
 
 public abstract class Protocol {
 
-    public abstract Request onRead(final ByteBuffer buffer, SocketChannel client);
+	public abstract Request onRead(final ByteBuffer buffer, SocketChannel client);
 
-    public abstract Response processRequest(final Request request);
-    
+	public abstract Response processRequest(final Request request);
+
 }

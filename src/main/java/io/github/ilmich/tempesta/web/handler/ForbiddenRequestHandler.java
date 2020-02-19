@@ -19,57 +19,55 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-
 import io.github.ilmich.tempesta.web.http.HttpRequest;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 import io.github.ilmich.tempesta.web.http.HttpResponse;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
-
 public class ForbiddenRequestHandler extends HttpRequestHandler {
 
-    private final static ForbiddenRequestHandler instance = new ForbiddenRequestHandler();
+	private final static ForbiddenRequestHandler instance = new ForbiddenRequestHandler();
 
-    private ForbiddenRequestHandler() {
-    }
+	private ForbiddenRequestHandler() {
+	}
 
-    public static final ForbiddenRequestHandler getInstance() {
-        return instance;
-    }
+	public static final ForbiddenRequestHandler getInstance() {
+		return instance;
+	}
 
-    @Override
-    public void get(HttpRequest request, HttpResponse response) {
-        perform(request, response);
-    }    
-    
-    @Override
-    public void post(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void get(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void put(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void post(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void delete(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void put(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void head(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void delete(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void option(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void head(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    private void perform(HttpRequest request, HttpResponse response) {
-	response.setStatus(HttpStatus.CLIENT_ERROR_FORBIDDEN);
-        response.setHeader("Connection", "close");
-        response.write("Authentication failed");
-    }
+	@Override
+	public void option(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
+
+	private void perform(HttpRequest request, HttpResponse response) {
+		response.setStatus(HttpStatus.CLIENT_ERROR_FORBIDDEN);
+		response.setHeader("Connection", "close");
+		response.write("Authentication failed");
+	}
 }

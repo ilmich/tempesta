@@ -21,6 +21,6 @@ package io.github.ilmich.tempesta.io.callback;
 
 public interface CallbackManagerMXBean {
 
-    int getNumberOfCallbacks();
+	int getNumberOfCallbacks();
 
 }

@@ -75,13 +75,13 @@ public class ServerConnector extends Thread {
 		if (this.serverChannel == null) {
 			this.bind(8080);
 		}
-		
+
 		long selectorTimeout = 250; // 250 m
 		try {
-			
+
 			selector = Selector.open();
 			serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-						
+
 			while (isRunning) {
 
 				if (selector.select(selectorTimeout) == 0) {
@@ -216,7 +216,7 @@ public class ServerConnector extends Thread {
 	public void shutDown() {
 		this.isRunning = false;
 	}
-	
+
 	public void startAndWait() {
 		this.start();
 		this.isRunning = true;

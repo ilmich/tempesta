@@ -41,7 +41,8 @@ public class JMXTimeoutManager implements TimeoutManager, TimeoutManagerMXBean {
 	private final Map<SelectableChannel, DecoratedTimeout> index = new ConcurrentHashMap<SelectableChannel, JMXTimeoutManager.DecoratedTimeout>();
 
 	public JMXTimeoutManager() { // instance initialization block
-		//MXBeanUtil.registerMXBean(this, "TimeoutManager", this.getClass().getSimpleName());
+		// MXBeanUtil.registerMXBean(this, "TimeoutManager",
+		// this.getClass().getSimpleName());
 	}
 
 	@Override
@@ -60,9 +61,9 @@ public class JMXTimeoutManager implements TimeoutManager, TimeoutManagerMXBean {
 		DecoratedTimeout sc = index.get(channel);
 		if (sc == null)
 			return;
-		
+
 		keepAliveTimeouts.remove(index.get(channel));
-		index.remove(channel);		
+		index.remove(channel);
 	}
 
 	@Override

@@ -32,14 +32,14 @@ import io.github.ilmich.tempesta.io.connectors.ServerConnector;
  */
 public interface IOHandler {
 
-    void handleAccept(SelectionKey key) throws IOException;
+	void handleAccept(SelectionKey key) throws IOException;
 
-    void handleConnect(SelectionKey key) throws IOException;
+	void handleConnect(SelectionKey key) throws IOException;
 
-    void handleRead(SelectionKey key) throws IOException;
+	void handleRead(SelectionKey key) throws IOException;
 
-    void handleWrite(SelectionKey key) throws IOException;
-    
-    void attachServerConnector(ServerConnector conn);
+	void handleWrite(SelectionKey key) throws IOException;
+
+	void attachServerConnector(ServerConnector conn);
 
 }

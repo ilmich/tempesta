@@ -23,16 +23,15 @@ import java.util.HashMap;
 
 public class MalFormedHttpRequest extends HttpRequest {
 
-    public static final MalFormedHttpRequest instance = new MalFormedHttpRequest();
+	public static final MalFormedHttpRequest instance = new MalFormedHttpRequest();
 
-    /* Dummy HttpRequest that represents a malformed client HTTP request */
-    private MalFormedHttpRequest() {
-        super("GET / Malformed request\r\n", new HashMap<String, String>(),"");
-    }
+	/* Dummy HttpRequest that represents a malformed client HTTP request */
+	private MalFormedHttpRequest() {
+		super("GET / Malformed request\r\n", new HashMap<String, String>(), "");
+	}
 
-    public boolean isFinished(){
-        return true;
-    }
-
+	public boolean isFinished() {
+		return true;
+	}
 
 }

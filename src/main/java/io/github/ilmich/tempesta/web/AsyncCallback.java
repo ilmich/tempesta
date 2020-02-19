@@ -25,12 +25,12 @@ package io.github.ilmich.tempesta.web;
  */
 public interface AsyncCallback {
 
-    public static final AsyncCallback nopCb = new AsyncCallback() {
-        @Override
-        public void onCallback() { /* nop */
-        }
-    };
+	public static final AsyncCallback nopCb = new AsyncCallback() {
+		@Override
+		public void onCallback() { /* nop */
+		}
+	};
 
-    void onCallback();
+	void onCallback();
 
 }

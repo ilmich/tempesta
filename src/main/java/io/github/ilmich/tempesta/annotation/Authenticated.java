@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
 
-
 /**
  * Annotation used by implementation of {@link RequestHandler} to show that a
  * method requires that the request (current user) is authenticated (i.e your

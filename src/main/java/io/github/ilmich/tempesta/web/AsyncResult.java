@@ -25,18 +25,18 @@ package io.github.ilmich.tempesta.web;
  */
 public interface AsyncResult<T> {
 
-    /**
-     * The asynchronous call failed to complete normally.
-     * 
-     * @param caught failure encountered while executing an async operation
-     */
-    void onFailure(Throwable caught);
+	/**
+	 * The asynchronous call failed to complete normally.
+	 * 
+	 * @param caught failure encountered while executing an async operation
+	 */
+	void onFailure(Throwable caught);
 
-    /**
-     * Called when an asynchronous call completes successfully.
-     * 
-     * @param result return value of the async call
-     */
-    void onSuccess(T result);
+	/**
+	 * Called when an asynchronous call completes successfully.
+	 * 
+	 * @param result return value of the async call
+	 */
+	void onSuccess(T result);
 
 }

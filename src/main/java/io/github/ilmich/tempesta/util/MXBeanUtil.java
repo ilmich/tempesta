@@ -27,19 +27,19 @@ import javax.management.ObjectName;
 
 public class MXBeanUtil {
 
-    private static final Logger logger = Logger.getLogger(MXBeanUtil.class.getName());
+	private static final Logger logger = Logger.getLogger(MXBeanUtil.class.getName());
 
-    private MXBeanUtil() {
-    }
+	private MXBeanUtil() {
+	}
 
-    public static void registerMXBean(Object self, String type, String name) {
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-        try {
-            String mbeanName = "io.github.ilmich.tempesta:type=" + type + ",name=" + name;
-            mbs.registerMBean(self, new ObjectName(mbeanName));
-        } catch (Exception e) {
-            logger.severe("Unable to register "+self.getClass().getCanonicalName()+" MXBean: " + e.getMessage());
-        }
-    }
+	public static void registerMXBean(Object self, String type, String name) {
+		MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+		try {
+			String mbeanName = "io.github.ilmich.tempesta:type=" + type + ",name=" + name;
+			mbs.registerMBean(self, new ObjectName(mbeanName));
+		} catch (Exception e) {
+			logger.severe("Unable to register " + self.getClass().getCanonicalName() + " MXBean: " + e.getMessage());
+		}
+	}
 
 }

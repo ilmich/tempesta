@@ -24,10 +24,8 @@ import io.github.ilmich.tempesta.web.http.Response;
 
 public class PlainIOHandler implements IOHandler {
 
-	private ExecutorService executor = new TempestaThreadPoolExecutor(HttpServerDescriptor.MIN_THREADS_PROCESSOR, 
-			HttpServerDescriptor.MAX_THREADS_PROCESSOR, 
-			HttpServerDescriptor.KEEP_ALIVE_TIMEOUT, 
-			TimeUnit.SECONDS, 
+	private ExecutorService executor = new TempestaThreadPoolExecutor(HttpServerDescriptor.MIN_THREADS_PROCESSOR,
+			HttpServerDescriptor.MAX_THREADS_PROCESSOR, HttpServerDescriptor.KEEP_ALIVE_TIMEOUT, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
 
 	private final Logger logger = Logger.getLogger(PlainIOHandler.class.getName());
@@ -92,7 +90,7 @@ public class PlainIOHandler implements IOHandler {
 				final CompletableFuture<Response> future = new CompletableFuture<Response>();
 
 				executor.submit(new Runnable() {
-				
+
 					@Override
 					public void run() {
 						try {

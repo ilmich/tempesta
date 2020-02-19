@@ -48,5 +48,5 @@ import java.util.regex.Pattern;
 @Target(ElementType.TYPE)
 public @interface Path {
 
-    String value();
+	String value();
 }

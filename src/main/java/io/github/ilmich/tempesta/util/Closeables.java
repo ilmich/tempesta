@@ -10,8 +10,8 @@ public class Closeables {
 			if (channel != null)
 				channel.close();
 		} catch (IOException e) {
-			
+
 		}
 	}
-	
+
 }

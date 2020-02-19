@@ -24,15 +24,15 @@ package io.github.ilmich.tempesta.util;
  */
 public class CookieUtil {
 
-    /**
-     * Utility method to calculate the expiration date of a cookie, starting
-     * with a time of validity in seconds.
-     * 
-     * @param seconds time of validity
-     * @return expiry date
-     */
-    public static String maxAgeToExpires(Long seconds) {
-        return DateUtil.parseToRFC1123(System.currentTimeMillis() + seconds * 1000);
-    }
+	/**
+	 * Utility method to calculate the expiration date of a cookie, starting with a
+	 * time of validity in seconds.
+	 * 
+	 * @param seconds time of validity
+	 * @return expiry date
+	 */
+	public static String maxAgeToExpires(Long seconds) {
+		return DateUtil.parseToRFC1123(System.currentTimeMillis() + seconds * 1000);
+	}
 
 }

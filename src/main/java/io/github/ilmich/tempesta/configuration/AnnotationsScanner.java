@@ -40,110 +40,110 @@ import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
  */
 public class AnnotationsScanner {
 
-    private final static Logger logger = Logger.getLogger(AnnotationsScanner.class.getName());
+	private final static Logger logger = Logger.getLogger(AnnotationsScanner.class.getName());
 
-    /**
-     * A <code>Map</code> of <code>RequestHandler</code>s associated with
-     * {@link Path}s.
-     */
-    private Map<String, HttpRequestHandler> pathHandlers = new HashMap<String, HttpRequestHandler>();
+	/**
+	 * A <code>Map</code> of <code>RequestHandler</code>s associated with
+	 * {@link Path}s.
+	 */
+	private Map<String, HttpRequestHandler> pathHandlers = new HashMap<String, HttpRequestHandler>();
 
-    /**
-     * Recursively iterate the given package, and attempt to resolve all
-     * annotated references for <code>RequestHandler</code> implementations.
-     * 
-     * @param handlerPackage the base package to scan, for example
-     *            "org.apache.awf".
-     * @return a <code>Map&lt;String, RequestHandler&gt;</code> of handlers,
-     *         which may be empty but not <code>null</code>.
-     */
-    public Map<String, HttpRequestHandler> findHandlers(String handlerPackage) {
+	/**
+	 * Recursively iterate the given package, and attempt to resolve all annotated
+	 * references for <code>RequestHandler</code> implementations.
+	 * 
+	 * @param handlerPackage the base package to scan, for example "org.apache.awf".
+	 * @return a <code>Map&lt;String, RequestHandler&gt;</code> of handlers, which
+	 *         may be empty but not <code>null</code>.
+	 */
+	public Map<String, HttpRequestHandler> findHandlers(String handlerPackage) {
 
-        if (Strings.isNullOrEmpty(handlerPackage)) {
-            logger.warning("No RequestHandler package defined");
-            return pathHandlers;
-        }
+		if (Strings.isNullOrEmpty(handlerPackage)) {
+			logger.warning("No RequestHandler package defined");
+			return pathHandlers;
+		}
 
-        List<Class<?>> classes = findClasses(handlerPackage);
-        for (Class<?> clazz : classes) {
-            if (clazz.isAnnotationPresent(Path.class)) {
+		List<Class<?>> classes = findClasses(handlerPackage);
+		for (Class<?> clazz : classes) {
+			if (clazz.isAnnotationPresent(Path.class)) {
 
-        	HttpRequestHandler handler = (HttpRequestHandler) ReflectionTools.createInstance(clazz.getCanonicalName());
-                Path path = clazz.getAnnotation(Path.class);
-                pathHandlers.put(path.value(), handler);
+				HttpRequestHandler handler = (HttpRequestHandler) ReflectionTools
+						.createInstance(clazz.getCanonicalName());
+				Path path = clazz.getAnnotation(Path.class);
+				pathHandlers.put(path.value(), handler);
 
-                logger.info("Added RequestHandler [" + clazz.getCanonicalName() + "] for Path [" + path.value() + "]");
-            }
-        }
+				logger.info("Added RequestHandler [" + clazz.getCanonicalName() + "] for Path [" + path.value() + "]");
+			}
+		}
 
-        return pathHandlers;
-    }
+		return pathHandlers;
+	}
 
-    /**
-     * Recursively finds all classes available to the context
-     * <code>ClassLoader</code> from the given package.
-     * 
-     * @param packageName the package from which to commence the scan.
-     * @return A <code>List</code> of <code>Class</code> references.
-     */
-    private List<Class<?>> findClasses(String packageName) {
+	/**
+	 * Recursively finds all classes available to the context
+	 * <code>ClassLoader</code> from the given package.
+	 * 
+	 * @param packageName the package from which to commence the scan.
+	 * @return A <code>List</code> of <code>Class</code> references.
+	 */
+	private List<Class<?>> findClasses(String packageName) {
 
-        List<Class<?>> classes = new ArrayList<Class<?>>();
+		List<Class<?>> classes = new ArrayList<Class<?>>();
 
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            logger.severe("Context ClassLoader was not available");
-            return classes;
-        }
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		if (loader == null) {
+			logger.severe("Context ClassLoader was not available");
+			return classes;
+		}
 
-        String path = packageName.replace('.', '/');
-        try {
-            List<File> directories = new ArrayList<File>();
+		String path = packageName.replace('.', '/');
+		try {
+			List<File> directories = new ArrayList<File>();
 
-            Enumeration<URL> resources = loader.getResources(path);
-            while (resources.hasMoreElements()) {
-                URL resource = resources.nextElement();
-                directories.add(new File(resource.getFile()));
-            }
+			Enumeration<URL> resources = loader.getResources(path);
+			while (resources.hasMoreElements()) {
+				URL resource = resources.nextElement();
+				directories.add(new File(resource.getFile()));
+			}
 
-            for (File directory : directories) {
-                classes.addAll(findClasses(directory, packageName));
-            }
-        } catch (IOException e) {
-            logger.severe("Exception accessing resources for [" + path + "]: " + e.getMessage());
-        }
+			for (File directory : directories) {
+				classes.addAll(findClasses(directory, packageName));
+			}
+		} catch (IOException e) {
+			logger.severe("Exception accessing resources for [" + path + "]: " + e.getMessage());
+		}
 
-        return classes;
-    }
+		return classes;
+	}
 
-    /**
-     * Recursively finds all class files available for the given package from
-     * the passed directory.
-     * 
-     * @param packageName the package from which to commence the scan.
-     * @return A <code>List</code> of <code>Class</code> references.
-     */
-    private List<Class<?>> findClasses(File directory, String packageName) {
+	/**
+	 * Recursively finds all class files available for the given package from the
+	 * passed directory.
+	 * 
+	 * @param packageName the package from which to commence the scan.
+	 * @return A <code>List</code> of <code>Class</code> references.
+	 */
+	private List<Class<?>> findClasses(File directory, String packageName) {
 
-        List<Class<?>> classes = new ArrayList<Class<?>>();
-        if (directory == null || !directory.exists()) {
-            logger.severe("Directory is null value or non-existent, [" + directory + "]");
-            return classes;
-        }
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+		if (directory == null || !directory.exists()) {
+			logger.severe("Directory is null value or non-existent, [" + directory + "]");
+			return classes;
+		}
 
-        for (File file : directory.listFiles()) {
-            try {
-                if (file.isDirectory()) {
-                    classes.addAll(findClasses(file, packageName + "." + file.getName()));
-                } else if (file.getName().endsWith(".class")) {
-                    classes.add(Class.forName(packageName + '.'
-                            + file.getName().substring(0, file.getName().length() - 6)));
-                }
-            } catch (ClassNotFoundException e) {
-                logger.severe("ClassNotFoundException: " + e.getMessage());
-            }
-        }
+		for (File file : directory.listFiles()) {
+			try {
+				if (file.isDirectory()) {
+					classes.addAll(findClasses(file, packageName + "." + file.getName()));
+				} else if (file.getName().endsWith(".class")) {
+					classes.add(Class
+							.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
+				}
+			} catch (ClassNotFoundException e) {
+				logger.severe("ClassNotFoundException: " + e.getMessage());
+			}
+		}
 
-        return classes;
-    }
+		return classes;
+	}
 }

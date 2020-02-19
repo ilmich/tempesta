@@ -21,8 +21,8 @@ package io.github.ilmich.tempesta.io.timeout;
 
 public interface TimeoutManagerMXBean {
 
-    int getNumberOfTimeouts();
+	int getNumberOfTimeouts();
 
-    int getNumberOfKeepAliveTimeouts();
+	int getNumberOfKeepAliveTimeouts();
 
 }

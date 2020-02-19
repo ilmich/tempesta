@@ -33,7 +33,6 @@ import io.github.ilmich.tempesta.web.http.Request;
 import io.github.ilmich.tempesta.web.http.Response;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
-
 /**
  * A RequestHandler that serves static content (files) from a predefined
  * directory.
@@ -45,70 +44,70 @@ import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
 public class StaticContentHandler extends HttpRequestHandler {
 
-    private final static StaticContentHandler instance = new StaticContentHandler();
+	private final static StaticContentHandler instance = new StaticContentHandler();
 
-    private MimetypesFileTypeMap mimeTypeMap;    
+	private MimetypesFileTypeMap mimeTypeMap;
 
-    public static StaticContentHandler getInstance() {
-        return instance;
-    }    
-    
-    private StaticContentHandler() {
-    	try {    		
+	public static StaticContentHandler getInstance() {
+		return instance;
+	}
+
+	private StaticContentHandler() {
+		try {
 			mimeTypeMap = new MimetypesFileTypeMap("META-INF/mime.types");
 		} catch (IOException e) {
 			mimeTypeMap = new MimetypesFileTypeMap();
 		}
-    }
+	}
 
-    /** {inheritDoc} */
-    @Override
-    public void get(HttpRequest request, HttpResponse response) {
-        perform(request, response, true);
-    }
+	/** {inheritDoc} */
+	@Override
+	public void get(HttpRequest request, HttpResponse response) {
+		perform(request, response, true);
+	}
 
-    /** {inheritDoc} */
-    @Override
-    public void head(final HttpRequest request, final HttpResponse response) {
-        perform(request, response, false);
-    }
+	/** {inheritDoc} */
+	@Override
+	public void head(final HttpRequest request, final HttpResponse response) {
+		perform(request, response, false);
+	}
 
-    /**
-     * @param request the <code>HttpRequest</code>
-     * @param response the <code>HttpResponse</code>
-     * @param hasBody <code>true</code> to write the message body;
-     *            <code>false</code> otherwise.
-     */
-    private void perform(final Request request, final Response response, boolean hasBody) {
+	/**
+	 * @param request  the <code>HttpRequest</code>
+	 * @param response the <code>HttpResponse</code>
+	 * @param hasBody  <code>true</code> to write the message body;
+	 *                 <code>false</code> otherwise.
+	 */
+	private void perform(final Request request, final Response response, boolean hasBody) {
 
-        final String path = request.getRequestedPath();
-        final File file = new File(path.substring(1)); // remove the leading '/'
-               
-        if (!file.exists()) {
-            throw new HttpException(HttpStatus.CLIENT_ERROR_NOT_FOUND,"File not found");
-        } else if (!file.isFile()) {
-            throw new HttpException(HttpStatus.CLIENT_ERROR_FORBIDDEN, path + "is not a file");
-        }
+		final String path = request.getRequestedPath();
+		final File file = new File(path.substring(1)); // remove the leading '/'
 
-        final long lastModified = file.lastModified();
-        response.setHeader("Last-Modified", DateUtil.parseToRFC1123(lastModified));
-        response.setHeader("Cache-Control", "public");
-        String mimeType = mimeTypeMap.getContentType(file);
-        if ("text/plain".equals(mimeType)) {
-            mimeType += "; charset=utf-8";
-        }
-        response.setHeader("Content-Type", mimeType);
-        final String ifModifiedSince = request.getHeader("If-Modified-Since");
-        if (ifModifiedSince != null) {
-            final long ims = DateUtil.parseToMilliseconds(ifModifiedSince);
-            if (lastModified <= ims) {
-                response.setStatus(HttpStatus.REDIRECTION_NOT_MODIFIED);
-                return;
-            }
-        }
+		if (!file.exists()) {
+			throw new HttpException(HttpStatus.CLIENT_ERROR_NOT_FOUND, "File not found");
+		} else if (!file.isFile()) {
+			throw new HttpException(HttpStatus.CLIENT_ERROR_FORBIDDEN, path + "is not a file");
+		}
 
-        if (hasBody) {
-            response.write(file);
-        }
-    }
+		final long lastModified = file.lastModified();
+		response.setHeader("Last-Modified", DateUtil.parseToRFC1123(lastModified));
+		response.setHeader("Cache-Control", "public");
+		String mimeType = mimeTypeMap.getContentType(file);
+		if ("text/plain".equals(mimeType)) {
+			mimeType += "; charset=utf-8";
+		}
+		response.setHeader("Content-Type", mimeType);
+		final String ifModifiedSince = request.getHeader("If-Modified-Since");
+		if (ifModifiedSince != null) {
+			final long ims = DateUtil.parseToMilliseconds(ifModifiedSince);
+			if (lastModified <= ims) {
+				response.setStatus(HttpStatus.REDIRECTION_NOT_MODIFIED);
+				return;
+			}
+		}
+
+		if (hasBody) {
+			response.write(file);
+		}
+	}
 }

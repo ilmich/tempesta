@@ -19,57 +19,55 @@
  */
 package io.github.ilmich.tempesta.web.handler;
 
-
 import io.github.ilmich.tempesta.web.http.HttpRequest;
 import io.github.ilmich.tempesta.web.http.HttpRequestHandler;
 import io.github.ilmich.tempesta.web.http.HttpResponse;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
-
 public class NotFoundRequestHandler extends HttpRequestHandler {
 
-    private final static NotFoundRequestHandler instance = new NotFoundRequestHandler();
+	private final static NotFoundRequestHandler instance = new NotFoundRequestHandler();
 
-    private NotFoundRequestHandler() {
-    }
+	private NotFoundRequestHandler() {
+	}
 
-    public static final NotFoundRequestHandler getInstance() {
-        return instance;
-    }
+	public static final NotFoundRequestHandler getInstance() {
+		return instance;
+	}
 
-    @Override
-    public void get(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
-    
-    @Override
-    public void post(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void get(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void put(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void post(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void delete(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void put(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void head(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void delete(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    @Override
-    public void option(HttpRequest request, HttpResponse response) {
-	perform(request, response);
-    }
+	@Override
+	public void head(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
 
-    private void perform(HttpRequest request, HttpResponse response) {
-	response.setStatus(HttpStatus.CLIENT_ERROR_NOT_FOUND);
-        response.setHeader("Connection", "close");
-        response.write("Requested URL: " + request.getRequestedPath() + " was not found");
-    }
+	@Override
+	public void option(HttpRequest request, HttpResponse response) {
+		perform(request, response);
+	}
+
+	private void perform(HttpRequest request, HttpResponse response) {
+		response.setStatus(HttpStatus.CLIENT_ERROR_NOT_FOUND);
+		response.setHeader("Connection", "close");
+		response.write("Requested URL: " + request.getRequestedPath() + " was not found");
+	}
 }

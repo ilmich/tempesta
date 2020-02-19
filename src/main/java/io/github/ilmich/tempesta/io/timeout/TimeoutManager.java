@@ -23,19 +23,19 @@ import java.nio.channels.SelectableChannel;
 
 public interface TimeoutManager {
 
-    void addTimeout(Timeout timeout);
+	void addTimeout(Timeout timeout);
 
-    void addKeepAliveTimeout(SelectableChannel channel, Timeout timeout);
+	void addKeepAliveTimeout(SelectableChannel channel, Timeout timeout);
 
-    boolean hasKeepAliveTimeout(SelectableChannel channel);
+	boolean hasKeepAliveTimeout(SelectableChannel channel);
 
-    public void removeKeepAliveTimeout(SelectableChannel channel);
+	public void removeKeepAliveTimeout(SelectableChannel channel);
 
-    /**
-     * 
-     * @return the positive number (>0) in milliseconds until the deadline for
-     *         the next scheduled timeout.
-     */
-    long execute();
+	/**
+	 * 
+	 * @return the positive number (>0) in milliseconds until the deadline for the
+	 *         next scheduled timeout.
+	 */
+	long execute();
 
 }

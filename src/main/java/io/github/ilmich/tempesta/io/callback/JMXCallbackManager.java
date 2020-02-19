@@ -32,7 +32,8 @@ public class JMXCallbackManager implements CallbackManager, CallbackManagerMXBea
 	private final AbstractCollection<AsyncCallback> callbacks = new ConcurrentLinkedQueue<AsyncCallback>();
 
 	public JMXCallbackManager() { // instance initialization block
-		//MXBeanUtil.registerMXBean(this, "CallbackManager", this.getClass().getSimpleName());
+		// MXBeanUtil.registerMXBean(this, "CallbackManager",
+		// this.getClass().getSimpleName());
 	}
 
 	@Override

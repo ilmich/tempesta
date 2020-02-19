@@ -25,22 +25,22 @@ import java.nio.channels.SocketChannel;
 
 public class IOSocketHelper {
 
-    public static int readBuffer(ByteBuffer buffer, SocketChannel channel) throws IOException {
-	int bytesRead = -1;
-	bytesRead = channel.read(buffer);
-	buffer.flip();
-	return bytesRead;
-    }
-
-    public static int writeBuffer(ByteBuffer buffer, SocketChannel channel) throws IOException {
-	int bytesWritten = -1;
-
-	bytesWritten = channel.write(buffer);
-	if (buffer.hasRemaining()) {
-	    buffer.compact();
+	public static int readBuffer(ByteBuffer buffer, SocketChannel channel) throws IOException {
+		int bytesRead = -1;
+		bytesRead = channel.read(buffer);
+		buffer.flip();
+		return bytesRead;
 	}
 
-	return bytesWritten;
-    }
+	public static int writeBuffer(ByteBuffer buffer, SocketChannel channel) throws IOException {
+		int bytesWritten = -1;
+
+		bytesWritten = channel.write(buffer);
+		if (buffer.hasRemaining()) {
+			buffer.compact();
+		}
+
+		return bytesWritten;
+	}
 
 }
