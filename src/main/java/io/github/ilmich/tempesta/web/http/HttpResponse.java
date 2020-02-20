@@ -77,6 +77,10 @@ public class HttpResponse implements Response {
 		this.status = status;
 		return this;
 	}
+	
+	public HttpStatus getStatus() {
+		return this.status;		
+	}
 
 	public void setCreateETag(boolean create) {
 		createETag = create;

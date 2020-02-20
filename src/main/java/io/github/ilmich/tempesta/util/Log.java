@@ -22,6 +22,8 @@ package io.github.ilmich.tempesta.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /** A low overhead, lightweight logging system.
  * @author Nathan Sweet <misc@n4te.com> */
@@ -53,6 +55,8 @@ public class Log {
 	static public boolean DEBUG = level <= LEVEL_DEBUG;
 	/** True when the TRACE level will be logged. */
 	static public boolean TRACE = level <= LEVEL_TRACE;
+
+	static private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 
 	/** Sets the level to log. If a version of this class is being used that has a final log level, this has no affect. */
 	static public void set (int level) {
@@ -182,20 +186,12 @@ public class Log {
 	/** Performs the actual logging. Default implementation logs to System.out. Extended and use {@link Log#logger} set to handle
 	 * logging differently. */
 	static public class Logger {
-		private final long firstLogTime = System.currentTimeMillis();
 
 		public void log (int level, String category, String message, Throwable ex) {
 			StringBuilder builder = new StringBuilder(256);
-
-			long time = System.currentTimeMillis() - firstLogTime;
-			long minutes = time / (1000 * 60);
-			long seconds = time / (1000) % 60;
-			if (minutes <= 9) builder.append('0');
-			builder.append(minutes);
-			builder.append(':');
-			if (seconds <= 9) builder.append('0');
-			builder.append(seconds);
-
+			
+			builder.append("[" + sdf.format(new Date()) + "]");
+			
 			switch (level) {
 			case LEVEL_ERROR:
 				builder.append(" ERROR: ");
