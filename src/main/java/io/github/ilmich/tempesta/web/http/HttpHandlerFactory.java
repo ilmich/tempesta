@@ -12,7 +12,6 @@ import io.github.ilmich.tempesta.web.handler.HttpContinueRequestHandler;
 import io.github.ilmich.tempesta.web.handler.NotFoundRequestHandler;
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
 import io.github.ilmich.tempesta.web.handler.StaticContentHandler;
-import io.github.ilmich.tempesta.web.http.auth.AuthHandler;
 
 public class HttpHandlerFactory implements HandlerFactory {
 
@@ -42,8 +41,6 @@ public class HttpHandlerFactory implements HandlerFactory {
 	 * A copy of the <code>Configuration</code> used to create this type.
 	 */
 	// private Configuration configuration;
-
-	private AuthHandler authHandler;
 
 	public HttpHandlerFactory() {
 		super();
@@ -116,12 +113,6 @@ public class HttpHandlerFactory implements HandlerFactory {
 		if (rh == null) {
 			return NotFoundRequestHandler.getInstance();
 		}
-		rh.setAuthHandler(getAuthHandler());
-		/*if (rh.isMethodAuthenticated(request.getMethod())
-				&& (getAuthHandler() == null || !getAuthHandler().isAuthorizedRequest(request))) {
-			return getAuthHandler() == null ? new UnAuthorizedBasicRequestHandler("Unknown")
-					: getAuthHandler().getUnAuthorizedRequestHandler(request);
-		}*/
 
 		if (request.expectContinue()) {
 			return HttpContinueRequestHandler.getInstance();
@@ -189,13 +180,5 @@ public class HttpHandlerFactory implements HandlerFactory {
 	 * public Configuration getConfiguration() { return configuration; }
 	 */
 
-	public AuthHandler getAuthHandler() {
-		return authHandler;
-	}
-
-	public HttpHandlerFactory setAuthHandler(AuthHandler authHandler) {
-		this.authHandler = authHandler;
-		return this;
-	}
 
 }

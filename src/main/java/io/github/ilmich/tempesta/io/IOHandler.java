@@ -21,6 +21,7 @@ package io.github.ilmich.tempesta.io;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 
 import io.github.ilmich.tempesta.io.connectors.ServerConnector;
 
@@ -39,6 +40,8 @@ public interface IOHandler {
 	void handleRead(SelectionKey key) throws IOException;
 
 	void handleWrite(SelectionKey key) throws IOException;
+	
+	void handleDisconnect(SocketChannel key);
 
 	void attachServerConnector(ServerConnector conn);
 

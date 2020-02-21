@@ -1,12 +1,9 @@
 package io.github.ilmich.tempesta.web.http;
 
 import io.github.ilmich.tempesta.web.handler.RequestHandler;
-import io.github.ilmich.tempesta.web.http.auth.AuthHandler;
 import io.github.ilmich.tempesta.web.http.protocol.HttpStatus;
 
 public abstract class HttpRequestHandler extends RequestHandler {
-
-	private AuthHandler authHandler;
 
 	public HttpRequestHandler() {
 		
@@ -51,18 +48,5 @@ public abstract class HttpRequestHandler extends RequestHandler {
 		response.setStatus(HttpStatus.SERVER_ERROR_NOT_IMPLEMENTED);
 		response.write(" ");
 	}
-
-	/**
-	 * @return the authHandler
-	 */
-	public AuthHandler getAuthHandler() {
-		return authHandler;
-	}
-
-	/**
-	 * @param authHandler the authHandler to set
-	 */
-	public void setAuthHandler(AuthHandler authHandler) {
-		this.authHandler = authHandler;
-	}
+	
 }

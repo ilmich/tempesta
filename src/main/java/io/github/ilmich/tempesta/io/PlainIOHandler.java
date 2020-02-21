@@ -10,11 +10,11 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import io.github.ilmich.tempesta.io.connectors.ServerConnector;
-import io.github.ilmich.tempesta.io.threads.TempestaThreadPoolExecutor;
 import io.github.ilmich.tempesta.util.ExceptionUtils;
 import io.github.ilmich.tempesta.util.Log;
 import io.github.ilmich.tempesta.web.http.HttpServerDescriptor;
@@ -25,7 +25,7 @@ public class PlainIOHandler implements IOHandler {
 	
 	private static final String TAG = "PlainIOHandler";
 
-	private ExecutorService executor = new TempestaThreadPoolExecutor(HttpServerDescriptor.MIN_THREADS_PROCESSOR,
+	private ExecutorService executor = new ThreadPoolExecutor(HttpServerDescriptor.MIN_THREADS_PROCESSOR,
 			HttpServerDescriptor.MAX_THREADS_PROCESSOR, HttpServerDescriptor.KEEP_ALIVE_TIMEOUT, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
 
@@ -162,7 +162,7 @@ public class PlainIOHandler implements IOHandler {
 				}
 				if (finished) {
 					// connector.closeOrRegisterForRead(key, response.isKeepAlive());
-					this.handleDisconnect(key);
+					this.finishRequest(key);
 				}
 			}
 
@@ -173,7 +173,7 @@ public class PlainIOHandler implements IOHandler {
 		}
 	}
 
-	public void handleDisconnect(SelectionKey key) throws IOException {
+	public void finishRequest(SelectionKey key) throws IOException {
 		if (key.attachment() != null && key.attachment() instanceof Response) {
 			Response response = (Response) key.attachment();
 			connector.closeOrRegisterForRead(key, response.isKeepAlive());
@@ -199,5 +199,11 @@ public class PlainIOHandler implements IOHandler {
 	@Override
 	public void attachServerConnector(ServerConnector conn) {
 		this.connector = conn;
+	}
+
+	@Override
+	public void handleDisconnect(SocketChannel key) {
+		// TODO Auto-generated method stub
+		
 	}
 }
